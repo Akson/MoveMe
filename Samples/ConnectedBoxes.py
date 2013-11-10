@@ -1,6 +1,6 @@
 #Created by Dmytro Konobrytskyi, 2013 (github.com/Akson/MoveMe)
 import wx
-from MoveMe.Canvas import Canvas
+from MoveMe.Canvas.Canvas import Canvas
 
 class CanvasWindow(wx.Frame):
     def __init__(self, *args, **kw):
