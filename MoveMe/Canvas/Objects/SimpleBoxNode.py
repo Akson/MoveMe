@@ -1,13 +1,15 @@
 #Created by Dmytro Konobrytskyi, 2013 (github.com/Akson/MoveMe)
 import wx
+from MoveMe.Canvas.Objects.Base.CanvasObject import CanvasObject
+from MoveMe.Canvas.Objects.Base.MovableObject import MovableObject
 
-class SimpleBoxNode(object):
+class SimpleBoxNode(MovableObject, CanvasObject):
     """
     SimpleBoxNode class represents a simplest possible canvas object 
     that is basically a rectangular box.
     """
-    def __init__(self, pos):
-        self.position = pos
+    def __init__(self, position):
+        super(SimpleBoxNode, self).__init__(position)
         self.boundingBoxDimensions = [90, 60]
 
     def Render(self, gc):
@@ -22,9 +24,13 @@ class SimpleBoxNode(object):
     def RenderHighlighting(self, gc):
         gc.SetBrush(wx.Brush('#888888', wx.TRANSPARENT))
         gc.SetPen(wx.Pen('#888888', 3, wx.DOT))
-        gc.DrawRectangle(self.position[0]-3, self.position[1]-3, self.boundingBoxDimensions[0]+6, self.boundingBoxDimensions[1]+6)
+        gc.DrawRectangle(self.position[0]-3, 
+                         self.position[1]-3, 
+                         self.boundingBoxDimensions[0]+6, 
+                         self.boundingBoxDimensions[1]+6)
         
     def ReturnObjectUnderCursor(self, pos):
+        #Check if a position is inside of a rectangle
         if pos[0] < self.position[0]: return None
         if pos[1] < self.position[1]: return None
         if pos[0] > self.position[0]+self.boundingBoxDimensions[0]: return None
