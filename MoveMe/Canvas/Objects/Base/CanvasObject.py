@@ -1,7 +1,7 @@
 #Created by Dmytro Konobrytskyi, 2013 (github.com/Akson/MoveMe)
 
 class CanvasObject(object):
-    def __init__(self):
+    def __init__(self, **kwargs):
         #Supported operations
         self.clonable = False
         self.movable = False

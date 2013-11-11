@@ -17,12 +17,14 @@ class Canvas(wx.PyScrolledWindow):
                            self.canvasDimensions[1]/self.scrollStep)
         
         #This list stores all objects on canvas
-        self._canvasObjects = [SimpleBoxNode([20,20]), SimpleBoxNode([140,40]), SimpleBoxNode([60,120])]
+        self._canvasObjects = [SimpleBoxNode(position=[20,20]), SimpleBoxNode(position=[140,40]), SimpleBoxNode(position=[60,120])]
 
         #References to objects required for implementing moving, highlighting, etc
         self._objectUnderCursor = None
         self._draggingObject = None
         self._lastDraggingPosition = None
+        self._lastLeftDownPos = None
+        self._selectedObject = None
 
         #Rendering initialization
         self._dcBuffer = wx.EmptyBitmap(*self.canvasDimensions)
@@ -52,6 +54,11 @@ class Canvas(wx.PyScrolledWindow):
         if self._objectUnderCursor:
             gc.PushState()
             self._objectUnderCursor.RenderHighlighting(gc)
+            gc.PopState()
+
+        if self._selectedObject:
+            gc.PushState()
+            self._selectedObject.RenderSelection(gc)
             gc.PopState()
 
     def OnMouseMotion(self, evt):
@@ -87,11 +94,21 @@ class Canvas(wx.PyScrolledWindow):
         if self._objectUnderCursor.movable:
             self._lastDraggingPosition = self.CalcUnscrolledPosition(evt.GetPosition()).Get()
             self._draggingObject = self._objectUnderCursor
+        
+        self._lastLeftDownPos = evt.GetPosition()
 
         self.Render()
 
     def OnMouseLeftUp(self, evt):
-        pass
+        #Selection
+        if (self._lastLeftDownPos 
+                and self._lastLeftDownPos[0] == evt.GetPosition()[0] 
+                and self._lastLeftDownPos[1] == evt.GetPosition()[1] 
+                and self._objectUnderCursor 
+                and self._objectUnderCursor.selectable):
+            self._selectedObject = self._objectUnderCursor
+            
+        self.Render()
 
     def FindObjectUnderPoint(self, pos):
         #Check all objects on a canvas. 
