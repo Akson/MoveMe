@@ -3,8 +3,9 @@ import wx
 from MoveMe.Canvas.Objects.Base.CanvasObject import CanvasObject
 from MoveMe.Canvas.Objects.Base.MovableObject import MovableObject
 from MoveMe.Canvas.Objects.Base.SelectableObject import SelectableObject
+from MoveMe.Canvas.Objects.Base.DeletableObject import DeletableObject
 
-class SimpleBoxNode(SelectableObject, MovableObject, CanvasObject):
+class SimpleBoxNode(DeletableObject, SelectableObject, MovableObject, CanvasObject):
     """
     SimpleBoxNode class represents a simplest possible canvas object 
     that is basically a rectangular box.
@@ -45,3 +46,6 @@ class SimpleBoxNode(SelectableObject, MovableObject, CanvasObject):
         if pos[0] > self.position[0]+self.boundingBoxDimensions[0]: return None
         if pos[1] > self.position[1]+self.boundingBoxDimensions[1]: return None
         return self
+    
+    def Delete(self):
+        pass

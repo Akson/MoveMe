@@ -38,6 +38,8 @@ class Canvas(wx.PyScrolledWindow):
         self.Bind(wx.EVT_LEFT_DOWN, self.OnMouseLeftDown)
         self.Bind(wx.EVT_LEFT_UP, self.OnMouseLeftUp)
 
+        self.Bind(wx.EVT_KEY_DOWN, self.OnKeyPress)
+
     def Render(self):
         """Render all nodes and their connection in depth order."""
         cdc = wx.ClientDC(self)
@@ -118,3 +120,19 @@ class Canvas(wx.PyScrolledWindow):
             if objUnderCursor: 
                 return objUnderCursor
         return None
+
+    def OnKeyPress(self, evt):
+        if evt.GetKeyCode() == wx.WXK_DELETE:
+            if self._selectedObject and self._selectedObject.deletable:
+                self._selectedObject.Delete()
+                if self._selectedObject in self._canvasObjects:
+                    self._canvasObjects.remove(self._selectedObject)
+                self._selectedObject = None
+        else: 
+            evt.Skip()
+
+        #Update object under cursor                
+        pos = self.CalcUnscrolledPosition(evt.GetPosition()).Get()
+        self._objectUnderCursor = self.FindObjectUnderPoint(pos)
+            
+        self.Render()
