@@ -33,7 +33,10 @@ class SimpleBoxNode(SelectableObject, MovableObject, CanvasObject):
     def RenderSelection(self, gc):
         gc.SetBrush(wx.Brush('#888888', wx.TRANSPARENT))
         gc.SetPen(wx.Pen('#CC0000', 3, wx.DOT))
-        gc.DrawRectangle(self.position[0]-2, self.position[1]-2, self.boundingBoxDimensions[0]+4, self.boundingBoxDimensions[1]+4)
+        gc.DrawRectangle(self.position[0]-2, 
+                         self.position[1]-2, 
+                         self.boundingBoxDimensions[0]+4, 
+                         self.boundingBoxDimensions[1]+4)
         
     def ReturnObjectUnderCursor(self, pos):
         #Check if a position is inside of a rectangle
