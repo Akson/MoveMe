@@ -10,7 +10,6 @@ class TextDropTarget(wx.TextDropTarget):
         self._canvas = canvas
     
     def OnDropText(self, x, y, data):
-        print x, y, data
         self._canvas.CreateNodeFromDescriptionAtPosition(data, [x, y])
 
 class Canvas(wx.PyScrolledWindow):
@@ -70,6 +69,9 @@ class Canvas(wx.PyScrolledWindow):
         dc = wx.BufferedDC(cdc, self._dcBuffer)
         dc.Clear()
         gc = wx.GraphicsContext.Create(dc)
+
+        font = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
+        gc.SetFont(font)
 
         for obj in self._canvasObjects:
             gc.PushState()
