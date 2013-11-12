@@ -116,9 +116,16 @@ class Canvas(wx.PyScrolledWindow):
         if not self._objectUnderCursor:
             return
 
-        if self._objectUnderCursor.movable:
-            self._lastDraggingPosition = self.CalcUnscrolledPosition(evt.GetPosition()).Get()
-            self._draggingObject = self._objectUnderCursor
+        if evt.ControlDown() and self._objectUnderCursor.clonable:
+            text = self._objectUnderCursor.GetCloningNodeDescription()
+            data = wx.TextDataObject(text)
+            dropSource = wx.DropSource(self)
+            dropSource.SetData(data)
+            dropSource.DoDragDrop(wx.Drag_AllowMove)
+        else:
+            if self._objectUnderCursor.movable:
+                self._lastDraggingPosition = self.CalcUnscrolledPosition(evt.GetPosition()).Get()
+                self._draggingObject = self._objectUnderCursor
         
         self._lastLeftDownPos = evt.GetPosition()
 

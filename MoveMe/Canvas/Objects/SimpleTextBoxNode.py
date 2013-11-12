@@ -10,3 +10,6 @@ class SimpleTextBoxNode(SimpleBoxNode):
         super(SimpleTextBoxNode, self).Render(gc)
 
         gc.DrawText(self.text, self.position[0]+10, self.position[1]+10)
+        
+    def GetCloningNodeDescription(self):
+        return self.text

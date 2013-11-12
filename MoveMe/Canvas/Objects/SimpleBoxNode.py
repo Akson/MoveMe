@@ -4,8 +4,9 @@ from MoveMe.Canvas.Objects.Base.CanvasObject import CanvasObject
 from MoveMe.Canvas.Objects.Base.MovableObject import MovableObject
 from MoveMe.Canvas.Objects.Base.SelectableObject import SelectableObject
 from MoveMe.Canvas.Objects.Base.DeletableObject import DeletableObject
+from MoveMe.Canvas.Objects.Base.ClonableObject import ClonableObject
 
-class SimpleBoxNode(DeletableObject, SelectableObject, MovableObject, CanvasObject):
+class SimpleBoxNode(ClonableObject, DeletableObject, SelectableObject, MovableObject, CanvasObject):
     """
     SimpleBoxNode class represents a simplest possible canvas object 
     that is basically a rectangular box.
