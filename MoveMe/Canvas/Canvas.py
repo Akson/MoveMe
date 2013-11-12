@@ -1,6 +1,17 @@
 #Created by Dmytro Konobrytskyi, 2013 (github.com/Akson/MoveMe)
 import wx
-from MoveMe.Canvas.Objects.SimpleBoxNode import SimpleBoxNode
+from MoveMe.Canvas.NodesFactory import NodesFactory
+from MoveMe.Canvas.Objects.SimpleTextBoxNode import SimpleTextBoxNode
+
+# Define Text Drop Target class
+class TextDropTarget(wx.TextDropTarget):
+    def __init__(self, canvas):
+        wx.TextDropTarget.__init__(self)
+        self._canvas = canvas
+    
+    def OnDropText(self, x, y, data):
+        print x, y, data
+        self._canvas.CreateNodeFromDescriptionAtPosition(data, [x, y])
 
 class Canvas(wx.PyScrolledWindow):
     """
@@ -17,7 +28,10 @@ class Canvas(wx.PyScrolledWindow):
                            self.canvasDimensions[1]/self.scrollStep)
         
         #This list stores all objects on canvas
-        self._canvasObjects = [SimpleBoxNode(position=[20,20]), SimpleBoxNode(position=[140,40]), SimpleBoxNode(position=[60,120])]
+        self._canvasObjects = [SimpleTextBoxNode(position=[20,20], text="A"), 
+                               SimpleTextBoxNode(position=[140,40], text="B"), 
+                               SimpleTextBoxNode(position=[60,120], text="C")]
+        self._nodesFactory = NodesFactory()
 
         #References to objects required for implementing moving, highlighting, etc
         self._objectUnderCursor = None
@@ -39,6 +53,15 @@ class Canvas(wx.PyScrolledWindow):
         self.Bind(wx.EVT_LEFT_UP, self.OnMouseLeftUp)
 
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyPress)
+        
+        self.SetDropTarget(TextDropTarget(self))
+
+    def CreateNodeFromDescriptionAtPosition(self, nodeDescription, pos):
+        node = self._nodesFactory.CreateNodeFromDescription(nodeDescription)
+        if node:
+            node.position = pos
+            self._canvasObjects.append(node)
+            self.Render()
 
     def Render(self):
         """Render all nodes and their connection in depth order."""

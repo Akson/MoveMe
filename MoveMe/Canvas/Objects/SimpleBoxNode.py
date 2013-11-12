@@ -12,16 +12,16 @@ class SimpleBoxNode(DeletableObject, SelectableObject, MovableObject, CanvasObje
     """
     def __init__(self, **kwargs):
         super(SimpleBoxNode, self).__init__(**kwargs)
-        self.boundingBoxDimensions = [90, 60]
+        self.boundingBoxDimensions = kwargs.get("boundingBoxDimensions", [90, 30])
 
     def Render(self, gc):
+        gc.SetBrush(wx.Brush('#EEEEEE', wx.SOLID))
         gc.SetPen(wx.Pen('#000000', 2, wx.SOLID))
         gc.DrawRoundedRectangle(self.position[0], 
                                 self.position[1], 
                                 self.boundingBoxDimensions[0], 
                                 self.boundingBoxDimensions[1], 10)
         gc.SetFont(wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT))
-        gc.DrawText("(%d, %d)"%(self.position[0], self.position[1]), self.position[0]+10, self.position[1]+10)
 
     def RenderHighlighting(self, gc):
         gc.SetBrush(wx.Brush('#888888', wx.TRANSPARENT))
