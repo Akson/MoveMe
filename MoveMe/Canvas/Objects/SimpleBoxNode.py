@@ -54,3 +54,10 @@ class SimpleBoxNode(ConnectableSource, ConnectableDestination, ClonableObject, D
     
     def Delete(self):
         pass
+    
+    def GetConnectionPortForTargetPoint(self, targetPoint):
+        return self.GetCenter()
+    
+    def GetCenter(self):
+        return [self.position[0] + 0.5*self.boundingBoxDimensions[0], self.position[1] + 0.5*self.boundingBoxDimensions[1]]
+    
