@@ -40,7 +40,8 @@ class Connection(CanvasObject):
         gc.DrawLines([rp, destinationPoint])
 
     def SourcePoint(self):
-        return self.source.position
+        return np.array(self.source.GetConnectionPortForTargetPoint(self.destination.GetCenter()))
     
     def DestinationPoint(self):
-        return self.destination.position
+        return np.array(self.destination.GetConnectionPortForTargetPoint(self.source.GetCenter()))
+

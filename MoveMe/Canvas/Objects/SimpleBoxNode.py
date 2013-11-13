@@ -8,6 +8,8 @@ from MoveMe.Canvas.Objects.Base.ClonableObject import ClonableObject
 from MoveMe.Canvas.Objects.Base.ConnectableDestination import ConnectableDestination
 from MoveMe.Canvas.Objects.Base.ConnectableSource import ConnectableSource
 
+import numpy as np
+
 class SimpleBoxNode(ConnectableSource, ConnectableDestination, ClonableObject, DeletableObject, SelectableObject, MovableObject, CanvasObject):
     """
     SimpleBoxNode class represents a simplest possible canvas object 
@@ -56,7 +58,37 @@ class SimpleBoxNode(ConnectableSource, ConnectableDestination, ClonableObject, D
         pass
     
     def GetConnectionPortForTargetPoint(self, targetPoint):
-        return self.GetCenter()
+        targetPoint = np.array(targetPoint)
+        center = np.array(self.GetCenter())
+        direction = targetPoint - center
+        
+        if direction[0] > 0:
+            #Check right border
+            borderX = self.position[0] + self.boundingBoxDimensions[0] 
+        else:
+            #Check left border
+            borderX = self.position[0]
+        if direction[0] == 0:
+            t1 = float("inf")
+        else:
+            t1 = (borderX - center[0]) / direction[0] 
+        
+        
+        if direction[1] > 0:
+            #Check bottom border
+            borderY = self.position[1] + self.boundingBoxDimensions[1] 
+        else:
+            #Check top border
+            borderY = self.position[1]
+        if direction[1] == 0: 
+            t2 = float("inf")
+        else:
+            t2 = (borderY - center[1]) / direction[1]
+        
+        t = min(t1, t2)
+        boundaryPoint = center + t*direction
+
+        return boundaryPoint
     
     def GetCenter(self):
         return [self.position[0] + 0.5*self.boundingBoxDimensions[0], self.position[1] + 0.5*self.boundingBoxDimensions[1]]
