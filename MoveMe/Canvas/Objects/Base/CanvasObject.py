@@ -5,9 +5,10 @@ class CanvasObject(object):
         #Supported operations
         self.clonable = False
         self.movable = False
-        self.connectable = False
         self.deletable = False
         self.selectable = False
+        self.connectableSource = False
+        self.connectableDestination = False
         
     def Render(self, gc): 
         """

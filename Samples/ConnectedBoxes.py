@@ -8,6 +8,7 @@ class CanvasWindow(wx.Frame):
         s = wx.BoxSizer(wx.VERTICAL)
         s.Add(Canvas(self), 1, wx.EXPAND)
         self.SetSizer(s)
+        self.SetTitle("MoveMe")
 
 if __name__ == '__main__':
     app = wx.PySimpleApp()

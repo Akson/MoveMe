@@ -5,8 +5,10 @@ from MoveMe.Canvas.Objects.Base.MovableObject import MovableObject
 from MoveMe.Canvas.Objects.Base.SelectableObject import SelectableObject
 from MoveMe.Canvas.Objects.Base.DeletableObject import DeletableObject
 from MoveMe.Canvas.Objects.Base.ClonableObject import ClonableObject
+from MoveMe.Canvas.Objects.Base.ConnectableDestination import ConnectableDestination
+from MoveMe.Canvas.Objects.Base.ConnectableSource import ConnectableSource
 
-class SimpleBoxNode(ClonableObject, DeletableObject, SelectableObject, MovableObject, CanvasObject):
+class SimpleBoxNode(ConnectableSource, ConnectableDestination, ClonableObject, DeletableObject, SelectableObject, MovableObject, CanvasObject):
     """
     SimpleBoxNode class represents a simplest possible canvas object 
     that is basically a rectangular box.
@@ -22,7 +24,9 @@ class SimpleBoxNode(ClonableObject, DeletableObject, SelectableObject, MovableOb
                                 self.position[1], 
                                 self.boundingBoxDimensions[0], 
                                 self.boundingBoxDimensions[1], 10)
-        gc.SetFont(wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT))
+        
+        for connection in self.GetOutcomingConnections():
+            connection.Render(gc)
 
     def RenderHighlighting(self, gc):
         gc.SetBrush(wx.Brush('#888888', wx.TRANSPARENT))

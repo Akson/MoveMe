@@ -2,6 +2,7 @@
 import wx
 from MoveMe.Canvas.NodesFactory import NodesFactory
 from MoveMe.Canvas.Objects.SimpleTextBoxNode import SimpleTextBoxNode
+from MoveMe.Canvas.Objects.Connection import Connection
 
 # Define Text Drop Target class
 class TextDropTarget(wx.TextDropTarget):
@@ -38,6 +39,7 @@ class Canvas(wx.PyScrolledWindow):
         self._lastDraggingPosition = None
         self._lastLeftDownPos = None
         self._selectedObject = None
+        self._connectionStartObject = None
 
         #Rendering initialization
         self._dcBuffer = wx.EmptyBitmap(*self.canvasDimensions)
@@ -94,6 +96,7 @@ class Canvas(wx.PyScrolledWindow):
         
         if not evt.LeftIsDown():
             self._draggingObject = None
+            self._connectionStartObject = None
 
         if evt.LeftIsDown() and evt.Dragging() and self._draggingObject:
             dx = pos[0]-self._lastDraggingPosition[0]
@@ -118,7 +121,9 @@ class Canvas(wx.PyScrolledWindow):
         if not self._objectUnderCursor:
             return
 
-        if evt.ControlDown() and self._objectUnderCursor.clonable:
+        if evt.ShiftDown() and self._objectUnderCursor.connectableSource:
+            self._connectionStartObject = self._objectUnderCursor
+        elif evt.ControlDown() and self._objectUnderCursor.clonable:
             text = self._objectUnderCursor.GetCloningNodeDescription()
             data = wx.TextDataObject(text)
             dropSource = wx.DropSource(self)
@@ -134,6 +139,12 @@ class Canvas(wx.PyScrolledWindow):
         self.Render()
 
     def OnMouseLeftUp(self, evt):
+        if (self._connectionStartObject 
+                and self._objectUnderCursor 
+                and self._connectionStartObject != self._objectUnderCursor 
+                and self._objectUnderCursor.connectableDestination):
+            self.ConnectNodes(self._connectionStartObject, self._objectUnderCursor)
+
         #Selection
         if (self._lastLeftDownPos 
                 and self._lastLeftDownPos[0] == evt.GetPosition()[0] 
@@ -168,3 +179,8 @@ class Canvas(wx.PyScrolledWindow):
         self._objectUnderCursor = self.FindObjectUnderPoint(pos)
             
         self.Render()
+
+    def ConnectNodes(self, source, destination):
+        newConnection = Connection(source, destination)
+        self._connectionStartObject.AddOutcomingConnection(newConnection)
+        self._objectUnderCursor.AddIncomingConnection(newConnection)
