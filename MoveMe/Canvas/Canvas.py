@@ -89,10 +89,22 @@ class Canvas(wx.PyScrolledWindow):
             gc.PushState()
             self._selectedObject.RenderSelection(gc)
             gc.PopState()
+            
+        if self._connectionStartObject:
+            gc.PushState()
+            if self._objectUnderCursor and self._objectUnderCursor.connectableDestination:
+                gc.SetPen(wx.Pen('#0000ff', 5, wx.DOT_DASH))
+                gc.DrawLines([self._connectionStartObject.GetCenter(), self._objectUnderCursor.GetCenter()])
+            else:
+                gc.SetPen(wx.Pen('#ccccff', 5, wx.DOT_DASH))
+                gc.DrawLines([self._connectionStartObject.GetCenter(), self._curMousePos])
+            gc.PopState()
+
 
     def OnMouseMotion(self, evt):
         pos = self.CalcUnscrolledPosition(evt.GetPosition()).Get()
         self._objectUnderCursor = self.FindObjectUnderPoint(pos)
+        self._curMousePos = pos
         
         if not evt.LeftIsDown():
             self._draggingObject = None
@@ -153,6 +165,8 @@ class Canvas(wx.PyScrolledWindow):
                 and self._objectUnderCursor.selectable):
             self._selectedObject = self._objectUnderCursor
             
+        self._connectionStartObject = None
+        self._draggingObject = None
         self.Render()
 
     def FindObjectUnderPoint(self, pos):
