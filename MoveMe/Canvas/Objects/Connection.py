@@ -2,8 +2,10 @@
 from MoveMe.Canvas.Objects.Base.CanvasObject import CanvasObject
 import wx
 import numpy as np
+from MoveMe.Canvas.Objects.Base.DeletableObject import DeletableObject
+from MoveMe.Canvas.Objects.Base.SelectableObject import SelectableObject
 
-class Connection(CanvasObject):
+class Connection(SelectableObject, DeletableObject, CanvasObject):
     def __init__(self, source, destination, **kwargs):
         super(Connection, self).__init__(**kwargs)
 
@@ -17,10 +19,13 @@ class Connection(CanvasObject):
         self.RenderArrow(gc, self.SourcePoint(), self.DestinationPoint())
 
     def RenderHighlighting(self, gc):
-        return
-
-    def ReturnObjectUnderCursor(self, pos):
-        return None
+        gc.SetPen(wx.Pen('#888888', 4, wx.DOT))
+        self.RenderArrow(gc, self.SourcePoint(), self.DestinationPoint())
+        
+    def RenderSelection(self, gc):
+        gc.SetBrush(wx.Brush('#888888', wx.TRANSPARENT))
+        gc.SetPen(wx.Pen('#CC0000', 3, wx.SOLID))
+        self.RenderArrow(gc, self.SourcePoint(), self.DestinationPoint())
     
     def RenderArrow(self, gc, sourcePoint, destinationPoint):
         gc.DrawLines([sourcePoint, destinationPoint])
@@ -44,4 +49,26 @@ class Connection(CanvasObject):
     
     def DestinationPoint(self):
         return np.array(self.destination.GetConnectionPortForTargetPoint(self.source.GetCenter()))
+
+    def Delete(self):
+        self.source.DeleteOutcomingConnection(self)
+        self.destination.DeleteIncomingConnection(self)
+
+    def ReturnObjectUnderCursor(self, pos):
+        return self if self.IsPointInside(pos) else None
+
+    def IsPointInside(self, pos):
+        d = self.DistToLineSegment(self.SourcePoint(), self.DestinationPoint(), np.array(pos))
+        return True if d<3 else False
+    
+    def DistToLineSegment(self, src, dst, pos):
+        lengthSq = (dst-src)[0]*(dst-src)[0]+(dst-src)[1]*(dst-src)[1]
+        if lengthSq == 0: return np.linalg.norm(dst-pos)
+            
+        t = np.dot(pos-src, dst-src)/lengthSq
+        if t<0: return np.linalg.norm(src-pos)
+        if t>1: return np.linalg.norm(dst-pos)
+        
+        proj = src + t * (dst-src)
+        return np.linalg.norm(proj-pos)
 

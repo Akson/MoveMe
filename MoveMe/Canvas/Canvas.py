@@ -21,7 +21,7 @@ class Canvas(wx.PyScrolledWindow):
     def __init__(self, *args, **kw):
         super(Canvas, self).__init__(*args, **kw)
         self.scrollStep = kw.get("scrollStep", 10)
-        self.canvasDimensions = kw.get("canvasDimensions", [800, 800])
+        self.canvasDimensions = kw.get("canvasDimensions", [1600, 800])
         self.SetScrollbars(self.scrollStep, 
                            self.scrollStep, 
                            self.canvasDimensions[0]/self.scrollStep, 

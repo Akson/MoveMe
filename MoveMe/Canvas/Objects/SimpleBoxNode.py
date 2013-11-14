@@ -47,15 +47,22 @@ class SimpleBoxNode(ConnectableSource, ConnectableDestination, ClonableObject, D
                          self.boundingBoxDimensions[1]+4)
         
     def ReturnObjectUnderCursor(self, pos):
-        #Check if a position is inside of a rectangle
-        if pos[0] < self.position[0]: return None
-        if pos[1] < self.position[1]: return None
-        if pos[0] > self.position[0]+self.boundingBoxDimensions[0]: return None
-        if pos[1] > self.position[1]+self.boundingBoxDimensions[1]: return None
-        return self
-    
-    def Delete(self):
-        pass
+        if self.IsPointInside(pos): 
+            return self
+        
+        for connection in self._outcomingConnections:
+            connectionComponent = connection.ReturnObjectUnderCursor(pos)
+            if connectionComponent: 
+                return connectionComponent
+
+        return None
+
+    def IsPointInside(self, pos):
+        if pos[0] < self.position[0]: return False
+        if pos[1] < self.position[1]: return False
+        if pos[0] > self.position[0]+self.boundingBoxDimensions[0]: return False
+        if pos[1] > self.position[1]+self.boundingBoxDimensions[1]: return False
+        return True
     
     def GetConnectionPortForTargetPoint(self, targetPoint):
         targetPoint = np.array(targetPoint)
@@ -93,3 +100,8 @@ class SimpleBoxNode(ConnectableSource, ConnectableDestination, ClonableObject, D
     def GetCenter(self):
         return [self.position[0] + 0.5*self.boundingBoxDimensions[0], self.position[1] + 0.5*self.boundingBoxDimensions[1]]
     
+    def Delete(self):
+        for connection in self._outcomingConnections:
+            connection.destination.DeleteIncomingConnection(connection)
+        for connection in self._incomingConnections:
+            connection.source.DeleteOutcomingConnection(connection)
