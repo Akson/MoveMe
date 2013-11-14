@@ -1,7 +1,8 @@
 #Created by Dmytro Konobrytskyi, 2013 (github.com/Akson/MoveMe)
 from MoveMe.Canvas.Objects.SimpleTextBoxNode import SimpleTextBoxNode
+from MoveMe.Canvas.Factories.NodesFactoryInterface import NodesFactoryInterface
 
-class NodesFactory(object):
+class DefaultNodesFactory(NodesFactoryInterface):
     def __init__(self):
         pass
     

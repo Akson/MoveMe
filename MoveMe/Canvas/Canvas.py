@@ -1,8 +1,8 @@
 #Created by Dmytro Konobrytskyi, 2013 (github.com/Akson/MoveMe)
 import wx
-from MoveMe.Canvas.NodesFactory import NodesFactory
 from MoveMe.Canvas.Objects.SimpleTextBoxNode import SimpleTextBoxNode
-from MoveMe.Canvas.Objects.Connection import Connection
+from MoveMe.Canvas.Factories.DefaultNodesFactory import DefaultNodesFactory
+from MoveMe.Canvas.Factories.DefaultConnectionsFactory import DefaultConnectionsFactory
 
 # Define Text Drop Target class
 class TextDropTarget(wx.TextDropTarget):
@@ -18,10 +18,10 @@ class Canvas(wx.PyScrolledWindow):
     Canvas stores and renders all nodes and node connections.
     It also handles all user interaction.
     """
-    def __init__(self, *args, **kw):
-        super(Canvas, self).__init__(*args, **kw)
-        self.scrollStep = kw.get("scrollStep", 10)
-        self.canvasDimensions = kw.get("canvasDimensions", [1600, 800])
+    def __init__(self, **kwargs):
+        super(Canvas, self).__init__(**kwargs)
+        self.scrollStep = kwargs.get("scrollStep", 10)
+        self.canvasDimensions = kwargs.get("canvasDimensions", [1600, 800])
         self.SetScrollbars(self.scrollStep, 
                            self.scrollStep, 
                            self.canvasDimensions[0]/self.scrollStep, 
@@ -31,7 +31,8 @@ class Canvas(wx.PyScrolledWindow):
         self._canvasObjects = [SimpleTextBoxNode(position=[20,20], text="A"), 
                                SimpleTextBoxNode(position=[140,40], text="B"), 
                                SimpleTextBoxNode(position=[60,120], text="C")]
-        self._nodesFactory = NodesFactory()
+        self._nodesFactory = kwargs.get("nodesFactory", DefaultNodesFactory())
+        self._connectionsFactory = kwargs.get("connectionsFactory", DefaultConnectionsFactory())
 
         #References to objects required for implementing moving, highlighting, etc
         self._objectUnderCursor = None
@@ -195,6 +196,7 @@ class Canvas(wx.PyScrolledWindow):
         self.Render()
 
     def ConnectNodes(self, source, destination):
-        newConnection = Connection(source, destination)
-        self._connectionStartObject.AddOutcomingConnection(newConnection)
-        self._objectUnderCursor.AddIncomingConnection(newConnection)
+        newConnection = self._connectionsFactory.CreateConnectionBetweenNodesFromDescription(source, destination)
+        if newConnection:
+            self._connectionStartObject.AddOutcomingConnection(newConnection)
+            self._objectUnderCursor.AddIncomingConnection(newConnection)
