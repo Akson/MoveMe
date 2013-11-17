@@ -18,8 +18,8 @@ class Canvas(wx.PyScrolledWindow):
     Canvas stores and renders all nodes and node connections.
     It also handles all user interaction.
     """
-    def __init__(self, **kwargs):
-        super(Canvas, self).__init__(**kwargs)
+    def __init__(self, parent, nodesFactory=DefaultNodesFactory(), connectionsFactory=DefaultConnectionsFactory(), **kwargs):
+        super(Canvas, self).__init__(parent=parent)
         self.scrollStep = kwargs.get("scrollStep", 10)
         self.canvasDimensions = kwargs.get("canvasDimensions", [1600, 800])
         self.SetScrollbars(self.scrollStep, 
@@ -31,8 +31,8 @@ class Canvas(wx.PyScrolledWindow):
         self._canvasObjects = [SimpleTextBoxNode(position=[20,20], text="A"), 
                                SimpleTextBoxNode(position=[140,40], text="B"), 
                                SimpleTextBoxNode(position=[60,120], text="C")]
-        self._nodesFactory = kwargs.get("nodesFactory", DefaultNodesFactory())
-        self._connectionsFactory = kwargs.get("connectionsFactory", DefaultConnectionsFactory())
+        self._nodesFactory = nodesFactory
+        self._connectionsFactory = connectionsFactory
 
         #References to objects required for implementing moving, highlighting, etc
         self._objectUnderCursor = None
