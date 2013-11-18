@@ -11,8 +11,8 @@ class Connection(SelectableObject, DeletableObject, CanvasObject):
 
         self.source = source
         self.destination = destination
-        self.arrowWidth = kwargs.get("arrowWidth", 5)
-        self.arrowLength = kwargs.get("arrowLength", 10)
+        self.arrowWidth = kwargs.get("arrowWidth", 3)
+        self.arrowLength = kwargs.get("arrowLength", 12)
 
     def Render(self, gc):
         gc.SetPen(wx.Pen('#000000', 1, wx.SOLID))

@@ -15,3 +15,6 @@ class BaseNode(ObjectWithText, SimpleBoxNode):
         gc.Clip(self.position[0], self.position[1], self.boundingBoxDimensions[0], self.boundingBoxDimensions[1])
         gc.SetFont(wx.Font(14, wx.ROMAN, wx.NORMAL, wx.NORMAL))
         gc.DrawText(self.text, self.position[0]+5, self.position[1]+5)
+        
+    def GetCloningNodeDescription(self):
+        return self.text
