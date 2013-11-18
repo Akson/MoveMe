@@ -6,7 +6,13 @@ class CanvasWindow(wx.Frame):
     def __init__(self, *args, **kw):
         wx.Frame.__init__(self, *args, **kw)
         s = wx.BoxSizer(wx.VERTICAL)
-        s.Add(Canvas(parent=self), 1, wx.EXPAND)
+        
+        canvas = Canvas(parent=self)
+        canvas.CreateNodeFromDescriptionAtPosition("A", [20,20])
+        canvas.CreateNodeFromDescriptionAtPosition("B", [140,40])
+        canvas.CreateNodeFromDescriptionAtPosition("C", [60,120])
+                               
+        s.Add(canvas, 1, wx.EXPAND)
         self.SetSizer(s)
         self.SetTitle("MoveMe")
 

@@ -28,9 +28,7 @@ class Canvas(wx.PyScrolledWindow):
                            self.canvasDimensions[1]/self.scrollStep)
         
         #This list stores all objects on canvas
-        self._canvasObjects = [SimpleScalableTextBoxNode(position=[20,20], text="A"), 
-                               SimpleScalableTextBoxNode(position=[140,40], text="B"), 
-                               SimpleScalableTextBoxNode(position=[60,120], text="C")]
+        self._canvasObjects = []
         self._nodesFactory = nodesFactory
         self._connectionsFactory = connectionsFactory
 
