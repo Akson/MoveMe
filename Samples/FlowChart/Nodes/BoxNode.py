@@ -1,15 +1,19 @@
 #Created by Dmytro Konobrytskyi, 2013 (github.com/Akson/MoveMe)
-from FlowChart.Nodes.ConnectionPort import ConnectionPort
-from MoveMe.Canvas.Objects.SimpleBoxNode import SimpleBoxNode
+import wx
+from FlowChart.Nodes.NodeWithConnectionPorts import NodeWith4ConnectionPorts
 
-class BoxNode(SimpleBoxNode):
+class BoxNode(NodeWith4ConnectionPorts):
     def __init__(self, **kwargs):
         super(BoxNode, self).__init__(**kwargs)
-        self.connectableSource = False
-        self.connectableDestination = False
+        self.boundingBoxDimensions = kwargs.get("boundingBoxDimensions", [90, 30])
 
-        self.connectionPorts = [ConnectionPort(self), ConnectionPort(self), ConnectionPort(self), ConnectionPort(self)]
-
+    def IsPointInside(self, pos):
+        if pos[0] < self.position[0]: return False
+        if pos[1] < self.position[1]: return False
+        if pos[0] > self.position[0]+self.boundingBoxDimensions[0]: return False
+        if pos[1] > self.position[1]+self.boundingBoxDimensions[1]: return False
+        return True
+    
     def UpdateConnectionPortsPositions(self):
         #top
         self.connectionPorts[0].relativeCenterPosition = [0.5*self.boundingBoxDimensions[0], 0]
@@ -20,34 +24,30 @@ class BoxNode(SimpleBoxNode):
         #right
         self.connectionPorts[3].relativeCenterPosition = [self.boundingBoxDimensions[0], 0.5*self.boundingBoxDimensions[1]]
 
-    def Render(self, gc):
-        super(BoxNode, self).Render(gc)
-        
-        self.UpdateConnectionPortsPositions()
-        for connectionPort in self.connectionPorts:
-            connectionPort.Render(gc)
+    def RenderMainShape(self, gc):
+        gc.SetBrush(wx.Brush('#EEEEEE', wx.SOLID))
+        gc.SetPen(wx.Pen('#000000', 2, wx.SOLID))
+        gc.DrawRoundedRectangle(self.position[0], 
+                                self.position[1], 
+                                self.boundingBoxDimensions[0], 
+                                self.boundingBoxDimensions[1], 10)
 
-    def RenderHighlighting(self, gc):
-        super(BoxNode, self).RenderHighlighting(gc)
+    def RenderMainShapeHighlighting(self, gc):
+        gc.SetBrush(wx.Brush('#888888', wx.TRANSPARENT))
+        gc.SetPen(wx.Pen('#888888', 3, wx.DOT))
+        gc.DrawRectangle(self.position[0]-3, 
+                         self.position[1]-3, 
+                         self.boundingBoxDimensions[0]+6, 
+                         self.boundingBoxDimensions[1]+6)
 
-        self.UpdateConnectionPortsPositions()
-        for connectionPort in self.connectionPorts:
-            connectionPort.RenderBox(gc)
-
-    def ReturnObjectUnderCursor(self, pos):
-        for connectionPort in self.connectionPorts:
-            connectionComponent = connectionPort.ReturnObjectUnderCursor(pos)
-            if connectionComponent: 
-                return connectionComponent
-
-        if self.IsPointInside(pos): 
-            return self
-        
-        return None
+    def RenderMainShapeSelection(self, gc):
+        gc.SetBrush(wx.Brush('#888888', wx.TRANSPARENT))
+        gc.SetPen(wx.Pen('#CC0000', 3, wx.DOT))
+        gc.DrawRectangle(self.position[0]-2, 
+                         self.position[1]-2, 
+                         self.boundingBoxDimensions[0]+4, 
+                         self.boundingBoxDimensions[1]+4)
 
     def GetCloningNodeDescription(self):
         return "text"
     
-    def Delete(self):
-        for connectionPort in self.connectionPorts:
-            connectionPort.Delete()
