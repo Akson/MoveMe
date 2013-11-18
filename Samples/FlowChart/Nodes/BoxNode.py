@@ -1,8 +1,9 @@
 #Created by Dmytro Konobrytskyi, 2013 (github.com/Akson/MoveMe)
 import wx
 from FlowChart.Nodes.NodeWithConnectionPorts import NodeWith4ConnectionPorts
+from MoveMe.Canvas.Objects.Base.ObjectWithText import ObjectWithText
 
-class BoxNode(NodeWith4ConnectionPorts):
+class BoxNode(ObjectWithText, NodeWith4ConnectionPorts):
     def __init__(self, **kwargs):
         super(BoxNode, self).__init__(**kwargs)
         self.boundingBoxDimensions = kwargs.get("boundingBoxDimensions", [90, 30])
@@ -27,10 +28,11 @@ class BoxNode(NodeWith4ConnectionPorts):
     def RenderMainShape(self, gc):
         gc.SetBrush(wx.Brush('#EEEEEE', wx.SOLID))
         gc.SetPen(wx.Pen('#000000', 2, wx.SOLID))
-        gc.DrawRoundedRectangle(self.position[0], 
+        gc.DrawRectangle(self.position[0], 
                                 self.position[1], 
                                 self.boundingBoxDimensions[0], 
-                                self.boundingBoxDimensions[1], 10)
+                                self.boundingBoxDimensions[1])
+        self.DrawText(gc)
 
     def RenderMainShapeHighlighting(self, gc):
         gc.SetBrush(wx.Brush('#888888', wx.TRANSPARENT))
@@ -49,5 +51,9 @@ class BoxNode(NodeWith4ConnectionPorts):
                          self.boundingBoxDimensions[1]+4)
 
     def GetCloningNodeDescription(self):
-        return "text"
+        return self.text
     
+    def DrawText(self, gc):
+        gc.Clip(self.position[0], self.position[1], self.boundingBoxDimensions[0], self.boundingBoxDimensions[1])
+        gc.SetFont(wx.Font(14, wx.ROMAN, wx.NORMAL, wx.NORMAL))
+        gc.DrawText(self.text, self.position[0]+5, self.position[1]+5)

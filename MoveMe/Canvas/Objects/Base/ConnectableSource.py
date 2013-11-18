@@ -16,3 +16,7 @@ class ConnectableSource(ConnectableObject):
         
     def GetOutcomingConnections(self):
         return self._outcomingConnections
+    
+    def Render(self, gc):
+        for connection in self.GetOutcomingConnections():
+            connection.Render(gc)

@@ -1,6 +1,6 @@
 #Created by Dmytro Konobrytskyi, 2013 (github.com/Akson/MoveMe)
 import wx
-from MoveMe.Canvas.Objects.SimpleTextBoxNode import SimpleTextBoxNode
+from MoveMe.Canvas.Objects.SimpleScalableTextBoxNode import SimpleScalableTextBoxNode
 from MoveMe.Canvas.Factories.DefaultNodesFactory import DefaultNodesFactory
 from MoveMe.Canvas.Factories.DefaultConnectionsFactory import DefaultConnectionsFactory
 
@@ -28,9 +28,9 @@ class Canvas(wx.PyScrolledWindow):
                            self.canvasDimensions[1]/self.scrollStep)
         
         #This list stores all objects on canvas
-        self._canvasObjects = [SimpleTextBoxNode(position=[20,20], text="A"), 
-                               SimpleTextBoxNode(position=[140,40], text="B"), 
-                               SimpleTextBoxNode(position=[60,120], text="C")]
+        self._canvasObjects = [SimpleScalableTextBoxNode(position=[20,20], text="A"), 
+                               SimpleScalableTextBoxNode(position=[140,40], text="B"), 
+                               SimpleScalableTextBoxNode(position=[60,120], text="C")]
         self._nodesFactory = nodesFactory
         self._connectionsFactory = connectionsFactory
 
@@ -73,8 +73,7 @@ class Canvas(wx.PyScrolledWindow):
         dc.Clear()
         gc = wx.GraphicsContext.Create(dc)
 
-        font = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
-        gc.SetFont(font)
+        gc.SetFont(wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT))
 
         for obj in self._canvasObjects:
             gc.PushState()
