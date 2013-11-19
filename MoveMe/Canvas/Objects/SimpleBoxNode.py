@@ -20,13 +20,16 @@ class SimpleBoxNode(ConnectableSource, ConnectableDestination, ClonableObject, D
         self.boundingBoxDimensions = kwargs.get("boundingBoxDimensions", [90, 30])
 
     def Render(self, gc):
-        super(SimpleBoxNode, self).Render(gc)
         gc.SetBrush(wx.Brush('#EEEEEE', wx.SOLID))
         gc.SetPen(wx.Pen('#000000', 2, wx.SOLID))
         gc.DrawRoundedRectangle(self.position[0], 
                                 self.position[1], 
                                 self.boundingBoxDimensions[0], 
                                 self.boundingBoxDimensions[1], 10)
+        
+        if self.connectableSource:
+            for connection in self.GetOutcomingConnections():
+                connection.Render(gc)
 
     def RenderHighlighting(self, gc):
         gc.SetBrush(wx.Brush('#888888', wx.TRANSPARENT))

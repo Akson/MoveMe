@@ -7,7 +7,13 @@ class CanvasWindow(wx.Frame):
     def __init__(self, *args, **kw):
         wx.Frame.__init__(self, *args, **kw)
         s = wx.BoxSizer(wx.VERTICAL)
-        s.Add(Canvas(parent=self, nodesFactory=NodesFactory()), 1, wx.EXPAND)
+
+        canvas = Canvas(parent=self, nodesFactory=NodesFactory())
+        canvas.CreateNodeFromDescriptionAtPosition('{"NodeClass": "SourceNode", "NodeParameters": {"text": "A"}}', [20,20])
+        canvas.CreateNodeFromDescriptionAtPosition('{"NodeClass": "IntermediateNode", "NodeParameters": {"text": "B"}}', [140,40])
+        canvas.CreateNodeFromDescriptionAtPosition('{"NodeClass": "DestinationNode", "NodeParameters": {"text": "C"}}', [60,120])
+
+        s.Add(canvas, 1, wx.EXPAND)
         self.SetSizer(s)
         self.SetTitle("MoveMe")
 
