@@ -26,7 +26,7 @@ class IntermediateNode(BaseNode, ConnectableSource, ConnectableDestination):
     def ReceiveMessage(self, message):
         processedMessage = self.ProcessMessage(message)
         if processedMessage:
-            self.SendMessage(message)
+            self.SendMessage(processedMessage)
             
     def ProcessMessage(self, message):
         """

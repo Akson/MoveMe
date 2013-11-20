@@ -9,9 +9,11 @@ class CanvasWindow(wx.Frame):
         s = wx.BoxSizer(wx.VERTICAL)
 
         canvas = Canvas(parent=self, nodesFactory=NodesFactory())
-        canvas.CreateNodeFromDescriptionAtPosition('{"NodeClass": "SourceNode", "NodeParameters": {"text": "A"}}', [20,20])
-        canvas.CreateNodeFromDescriptionAtPosition('{"NodeClass": "IntermediateNode", "NodeParameters": {"text": "B"}}', [140,40])
-        canvas.CreateNodeFromDescriptionAtPosition('{"NodeClass": "DestinationNode", "NodeParameters": {"text": "C"}}', [60,120])
+        canvas.CreateNodeFromDescriptionAtPosition('{"NodeClass": "NumbersSequenceSource", "NodeParameters": {}}', [20,20])
+        canvas.CreateNodeFromDescriptionAtPosition('{"NodeClass": "HubNode", "NodeParameters": {}}', [140,20])
+        canvas.CreateNodeFromDescriptionAtPosition('{"NodeClass": "X2Node", "NodeParameters": {}}', [140,60])
+        canvas.CreateNodeFromDescriptionAtPosition('{"NodeClass": "Plus1Node", "NodeParameters": {}}', [140,100])
+        canvas.CreateNodeFromDescriptionAtPosition('{"NodeClass": "Message2ConsoleWriterNode", "NodeParameters": {}}', [260,20])
 
         s.Add(canvas, 1, wx.EXPAND)
         self.SetSizer(s)

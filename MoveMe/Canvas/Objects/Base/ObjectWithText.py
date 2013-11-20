@@ -5,4 +5,4 @@ class ObjectWithText(CanvasObject):
     def __init__(self, **kwargs):
         super(ObjectWithText, self).__init__(**kwargs)
         
-        self.text = kwargs.get("text", "Text...")
+        self.text = kwargs.get("text", self.__class__.__name__)

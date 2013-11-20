@@ -5,6 +5,9 @@ from Samples import MessageProcessingGraph
 from MessageProcessingGraph.Nodes.Base.SourceNode import SourceNode
 from MessageProcessingGraph.Nodes.Base.IntermediateNode import IntermediateNode
 from MessageProcessingGraph.Nodes.Base.DestinationNode import DestinationNode
+from MessageProcessingGraph.Nodes.TestSources import *
+from MessageProcessingGraph.Nodes.TestDestinations import *
+from MessageProcessingGraph.Nodes.TestIntermediates import *
 
 class NodesFactory(NodesFactoryInterface):
     def __init__(self):
@@ -18,9 +21,11 @@ class NodesFactory(NodesFactoryInterface):
             return None
         
         nodeClasses = {
-                       "SourceNode":SourceNode, 
-                       "IntermediateNode":IntermediateNode, 
-                       "DestinationNode":DestinationNode
+                       "NumbersSequenceSource":NumbersSequenceSource, 
+                       "HubNode":HubNode, 
+                       "X2Node":X2Node, 
+                       "Plus1Node":Plus1Node, 
+                       "Message2ConsoleWriterNode":Message2ConsoleWriterNode
                        }
         nodeClass = nodeClasses[nodeDescriptionDict["NodeClass"]]
         node = nodeClass()
