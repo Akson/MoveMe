@@ -1,7 +1,7 @@
 #Created by Dmytro Konobrytskyi, 2013 (github.com/Akson/MoveMe)
-from MessageProcessingGraph.Nodes.BaseNode import BaseNode
 from MoveMe.Canvas.Objects.Base.ConnectableSource import ConnectableSource
 from MoveMe.Canvas.Objects.Base.ConnectableDestination import ConnectableDestination
+from MessageProcessingGraph.Nodes.Base.BaseNode import BaseNode
 
 class IntermediateNode(BaseNode, ConnectableSource, ConnectableDestination):
     def __init__(self, **kwargs):

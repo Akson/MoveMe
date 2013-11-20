@@ -131,8 +131,9 @@ class Canvas(wx.PyScrolledWindow):
         if not self._objectUnderCursor:
             return
 
-        if evt.ShiftDown() and self._objectUnderCursor.connectableSource:
-            self._connectionStartObject = self._objectUnderCursor
+        if evt.ShiftDown():
+            if self._objectUnderCursor.connectableSource:
+                self._connectionStartObject = self._objectUnderCursor
         elif evt.ControlDown() and self._objectUnderCursor.clonable:
             text = self._objectUnderCursor.GetCloningNodeDescription()
             data = wx.TextDataObject(text)

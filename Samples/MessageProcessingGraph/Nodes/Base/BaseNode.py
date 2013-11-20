@@ -8,6 +8,7 @@ from MoveMe.Canvas.Objects.Base.SelectableObject import SelectableObject
 import wx
 import numpy as np
 import json
+from Samples import MessageProcessingGraph
 
 class BaseNode(ObjectWithText, ClonableObject, DeletableObject, SelectableObject, MovableObject):
     def __init__(self, **kwargs):
@@ -15,6 +16,7 @@ class BaseNode(ObjectWithText, ClonableObject, DeletableObject, SelectableObject
 
         self.boundingBoxDimensions = kwargs.get("boundingBoxDimensions", [90, 30])
         self.nodeBackgroundColor = '#EEEEEE'
+        self.parametersForSaving = ["text"]
 
     def Render(self, gc):
         gc.SetBrush(wx.Brush(self.nodeBackgroundColor, wx.SOLID))
@@ -104,12 +106,12 @@ class BaseNode(ObjectWithText, ClonableObject, DeletableObject, SelectableObject
         
     def GetCloningNodeDescription(self):
         nodeDescription = {}
+        nodeDescription["APPLICATION_ID"] = MessageProcessingGraph.APPLICATION_ID
         nodeDescription["NodeClass"] = self.__class__.__name__
         
         nodeParameters = {}
-        for parameter in self.__dict__:
-            if parameter[0]!='_':
-                nodeParameters[parameter] = self.__dict__[parameter]
+        for parameter in self.parametersForSaving:
+            nodeParameters[parameter] = self.__dict__[parameter]
         nodeDescription["NodeParameters"] = nodeParameters 
         
         return json.dumps(nodeDescription)

@@ -1,7 +1,16 @@
 #Created by Dmytro Konobrytskyi, 2013 (github.com/Akson/MoveMe)
 
+class ObjectIDGenerator(object):
+    _currentId = 0
+    @staticmethod
+    def GetNextId():
+        resultId = ObjectIDGenerator._currentId
+        ObjectIDGenerator._currentId+=1
+        return resultId
+
 class CanvasObject(object):
     def __init__(self, **kwargs):
+        self.id = ObjectIDGenerator.GetNextId()
         #Supported operations
         self.clonable = False
         self.movable = False
