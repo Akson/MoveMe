@@ -2,8 +2,8 @@
 from MessageProcessingGraph.Nodes.Base.DestinationNode import DestinationNode
 
 class Message2ConsoleWriterNode(DestinationNode):
-    def __init__(self, **kwargs):
-        super(Message2ConsoleWriterNode, self).__init__(**kwargs)
+    def __init__(self):
+        super(Message2ConsoleWriterNode, self).__init__()
         
     def ReceiveMessage(self, message):
         print "Destination", message

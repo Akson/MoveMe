@@ -2,8 +2,8 @@
 from MoveMe.Canvas.Objects.Base.ConnectableObject import ConnectableObject
 
 class ConnectableDestination(ConnectableObject):
-    def __init__(self, **kwargs):
-        super(ConnectableDestination, self).__init__(**kwargs)
+    def __init__(self):
+        super(ConnectableDestination, self).__init__()
         self.connectableDestination = True
         
         self._incomingConnections = []

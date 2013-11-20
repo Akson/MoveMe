@@ -2,8 +2,8 @@
 from MoveMe.Canvas.Objects.Base.CanvasObject import CanvasObject
 
 class ConnectableObject(CanvasObject):
-    def __init__(self, **kwargs):
-        super(ConnectableObject, self).__init__(**kwargs)
+    def __init__(self):
+        super(ConnectableObject, self).__init__()
 
     def GetConnectionPortForTargetPoint(self, targetPoint):
         """

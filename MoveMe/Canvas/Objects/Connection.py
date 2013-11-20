@@ -6,13 +6,13 @@ from MoveMe.Canvas.Objects.Base.DeletableObject import DeletableObject
 from MoveMe.Canvas.Objects.Base.SelectableObject import SelectableObject
 
 class Connection(SelectableObject, DeletableObject, CanvasObject):
-    def __init__(self, source, destination, **kwargs):
-        super(Connection, self).__init__(**kwargs)
+    def __init__(self, source, destination, arrowWidth=3, arrowLength=12):
+        super(Connection, self).__init__()
 
         self.source = source
         self.destination = destination
-        self.arrowWidth = kwargs.get("arrowWidth", 3)
-        self.arrowLength = kwargs.get("arrowLength", 12)
+        self.arrowWidth = arrowWidth
+        self.arrowLength = arrowLength
 
     def Render(self, gc):
         gc.SetPen(wx.Pen('#000000', 1, wx.SOLID))

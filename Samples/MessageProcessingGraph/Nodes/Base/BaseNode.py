@@ -9,12 +9,13 @@ import wx
 import numpy as np
 
 class BaseNode(ObjectWithText, ClonableObject, DeletableObject, SelectableObject, MovableObject):
-    def __init__(self, **kwargs):
-        super(BaseNode, self).__init__(**kwargs)
+    def __init__(self):
+        super(BaseNode, self).__init__()
 
-        self.boundingBoxDimensions = kwargs.get("boundingBoxDimensions", [90, 30])
+        self.boundingBoxDimensions = [90, 30]
         self.nodeBackgroundColor = '#EEEEEE'
         self.parametersForSaving.append("text")
+        self.parametersForSaving.append("boundingBoxDimensions")
 
     def Render(self, gc):
         gc.SetBrush(wx.Brush(self.nodeBackgroundColor, wx.SOLID))

@@ -15,9 +15,9 @@ class SimpleBoxNode(ConnectableSource, ConnectableDestination, ClonableObject, D
     SimpleBoxNode class represents a simplest possible canvas object 
     that is basically a rectangular box.
     """
-    def __init__(self, **kwargs):
+    def __init__(self, boundingBoxDimensions=[90,30], **kwargs):
         super(SimpleBoxNode, self).__init__(**kwargs)
-        self.boundingBoxDimensions = kwargs.get("boundingBoxDimensions", [90, 30])
+        self.boundingBoxDimensions = boundingBoxDimensions
 
     def Render(self, gc):
         gc.SetBrush(wx.Brush('#EEEEEE', wx.SOLID))

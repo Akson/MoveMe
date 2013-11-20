@@ -2,8 +2,8 @@
 from MoveMe.Canvas.Objects.Base.CanvasObject import CanvasObject
 
 class SelectableObject(CanvasObject):
-    def __init__(self, **kwargs):
-        super(SelectableObject, self).__init__(**kwargs)
+    def __init__(self):
+        super(SelectableObject, self).__init__()
         self.selectable = True
 
     def RenderSelection(self, gc):

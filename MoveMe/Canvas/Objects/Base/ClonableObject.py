@@ -2,8 +2,8 @@
 from MoveMe.Canvas.Objects.Base.CanvasObject import CanvasObject
 
 class ClonableObject(CanvasObject):
-    def __init__(self, **kwargs):
-        super(ClonableObject, self).__init__(**kwargs)
+    def __init__(self):
+        super(ClonableObject, self).__init__()
         self.clonable = True
         self.parametersForSaving = []
 

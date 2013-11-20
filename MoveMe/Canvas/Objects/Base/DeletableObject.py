@@ -2,8 +2,8 @@
 from MoveMe.Canvas.Objects.Base.CanvasObject import CanvasObject
 
 class DeletableObject(CanvasObject):
-    def __init__(self, **kwargs):
-        super(DeletableObject, self).__init__(**kwargs)
+    def __init__(self):
+        super(DeletableObject, self).__init__()
         self.deletable = True
         
     def Delete(self):

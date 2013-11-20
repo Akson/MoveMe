@@ -5,8 +5,8 @@ import thread
 
 class TimingBasedSourceNode(SourceNode):
     nodesList = None
-    def __init__(self, **kwargs):
-        super(TimingBasedSourceNode, self).__init__(**kwargs)
+    def __init__(self):
+        super(TimingBasedSourceNode, self).__init__()
         if TimingBasedSourceNode.nodesList == None:
             TimingBasedSourceNode.nodesList = []
             thread.start_new_thread(self.SourcesThreadFunction, ())
@@ -23,8 +23,8 @@ class TimingBasedSourceNode(SourceNode):
         raise NotImplementedError()
 
 class NumbersSequenceSource(TimingBasedSourceNode):
-    def __init__(self, **kwargs):
-        super(NumbersSequenceSource, self).__init__(**kwargs)
+    def __init__(self):
+        super(NumbersSequenceSource, self).__init__()
         
         self.value = self.id
         TimingBasedSourceNode.nodesList.append(self)

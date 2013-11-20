@@ -3,8 +3,8 @@ from MoveMe.Canvas.Objects.Base.ConnectableDestination import ConnectableDestina
 from MessageProcessingGraph.Nodes.Base.BaseNode import BaseNode
 
 class DestinationNode(BaseNode, ConnectableDestination):
-    def __init__(self, **kwargs):
-        super(DestinationNode, self).__init__(**kwargs)
+    def __init__(self):
+        super(DestinationNode, self).__init__()
         self.nodeBackgroundColor = '#FFDDDD'
 
     def ReturnObjectUnderCursor(self, pos):

@@ -9,7 +9,7 @@ class ObjectIDGenerator(object):
         return resultId
 
 class CanvasObject(object):
-    def __init__(self, **kwargs):
+    def __init__(self):
         self.id = ObjectIDGenerator.GetNextId()
         #Supported operations
         self.clonable = False
