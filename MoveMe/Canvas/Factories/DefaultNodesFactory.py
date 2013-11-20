@@ -1,5 +1,4 @@
 #Created by Dmytro Konobrytskyi, 2013 (github.com/Akson/MoveMe)
-from MoveMe.Canvas.Objects.SimpleScalableTextBoxNode import SimpleScalableTextBoxNode
 from MoveMe.Canvas.Factories.NodesFactoryInterface import NodesFactoryInterface
 import logging
 

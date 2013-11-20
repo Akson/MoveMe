@@ -1,7 +1,6 @@
 #Created by Dmytro Konobrytskyi, 2013 (github.com/Akson/MoveMe)
 import wx
 from MoveMe.Canvas.Canvas import Canvas
-from FlowChart.FlowChartNodesFactory import FlowChartNodesFactory
 from MoveMe.Canvas.Factories.DefaultNodesFactory import DefaultNodesFactory
 from FlowChart.Nodes.BoxNode import BoxNode
 import logging

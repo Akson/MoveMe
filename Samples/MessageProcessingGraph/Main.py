@@ -1,15 +1,26 @@
 #Created by Dmytro Konobrytskyi, 2013 (github.com/Akson/MoveMe)
 import wx
-from MoveMe.Canvas.Canvas import Canvas
-from MessageProcessingGraph.NodesFactory import NodesFactory
 import logging
+from MoveMe.Canvas.Canvas import Canvas
+from MoveMe.Canvas.Factories.DefaultNodesFactory import DefaultNodesFactory
+from MessageProcessingGraph.Nodes.TestSources import NumbersSequenceSource
+from MessageProcessingGraph.Nodes.TestIntermediates import Hub, X2, Plus1
+from MessageProcessingGraph.Nodes.TestDestinations import Message2ConsoleWriterNode
 
 class CanvasWindow(wx.Frame):
     def __init__(self, *args, **kw):
         wx.Frame.__init__(self, size=[1280, 720], *args, **kw)
         s = wx.BoxSizer(wx.VERTICAL)
 
-        canvas = Canvas(parent=self, nodesFactory=NodesFactory())
+        supportedClasses = {
+                           "NumbersSequenceSource":NumbersSequenceSource, 
+                           "Hub":Hub, 
+                           "X2":X2, 
+                           "Plus1":Plus1, 
+                           "Message2ConsoleWriterNode":Message2ConsoleWriterNode
+                           } 
+        
+        canvas = Canvas(parent=self, nodesFactory=DefaultNodesFactory(supportedClasses))
         canvas.applicationId = "MessageProcessingGraph"
         canvas.CreateNodeFromDescriptionAtPosition('{"NodeClass": "NumbersSequenceSource", "APPLICATION_ID": "MessageProcessingGraph"}', [20,20])
         canvas.CreateNodeFromDescriptionAtPosition('{"NodeClass": "Hub", "APPLICATION_ID": "MessageProcessingGraph"}', [240,20])
