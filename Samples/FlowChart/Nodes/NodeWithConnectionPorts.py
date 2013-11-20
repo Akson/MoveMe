@@ -60,6 +60,3 @@ class NodeWith4ConnectionPorts(ClonableObject, DeletableObject, SelectableObject
 
     def RenderMainShapeSelection(self, gc):
         raise NotImplementedError()
-            
-    def GetCloningNodeDescription(self):
-        raise NotImplementedError()

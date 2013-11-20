@@ -7,8 +7,6 @@ from MoveMe.Canvas.Objects.Base.SelectableObject import SelectableObject
 
 import wx
 import numpy as np
-import json
-from Samples import MessageProcessingGraph
 
 class BaseNode(ObjectWithText, ClonableObject, DeletableObject, SelectableObject, MovableObject):
     def __init__(self, **kwargs):
@@ -16,7 +14,7 @@ class BaseNode(ObjectWithText, ClonableObject, DeletableObject, SelectableObject
 
         self.boundingBoxDimensions = kwargs.get("boundingBoxDimensions", [90, 30])
         self.nodeBackgroundColor = '#EEEEEE'
-        self.parametersForSaving = ["text"]
+        self.parametersForSaving.append("text")
 
     def Render(self, gc):
         gc.SetBrush(wx.Brush(self.nodeBackgroundColor, wx.SOLID))
@@ -103,15 +101,3 @@ class BaseNode(ObjectWithText, ClonableObject, DeletableObject, SelectableObject
         gc.Clip(self.position[0], self.position[1], self.boundingBoxDimensions[0], self.boundingBoxDimensions[1])
         gc.SetFont(wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT))
         gc.DrawText(self.text, self.position[0]+5, self.position[1]+5)
-        
-    def GetCloningNodeDescription(self):
-        nodeDescription = {}
-        nodeDescription["APPLICATION_ID"] = MessageProcessingGraph.APPLICATION_ID
-        nodeDescription["NodeClass"] = self.__class__.__name__
-        
-        nodeParameters = {}
-        for parameter in self.parametersForSaving:
-            nodeParameters[parameter] = self.__dict__[parameter]
-        nodeDescription["NodeParameters"] = nodeParameters 
-        
-        return json.dumps(nodeDescription)

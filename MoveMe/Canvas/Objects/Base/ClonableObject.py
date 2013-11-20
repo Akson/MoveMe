@@ -5,10 +5,19 @@ class ClonableObject(CanvasObject):
     def __init__(self, **kwargs):
         super(ClonableObject, self).__init__(**kwargs)
         self.clonable = True
+        self.parametersForSaving = []
 
     def GetCloningNodeDescription(self):
         """
         GetNodeDescription should return a dictionary that contains 
         all information required for cloning this node at another position
         """
-        raise NotImplementedError()
+        nodeDescription = {}
+        nodeDescription["NodeClass"] = self.__class__.__name__
+        
+        nodeParameters = {}
+        for parameter in self.parametersForSaving:
+            nodeParameters[parameter] = self.__dict__[parameter]
+        nodeDescription["NodeParameters"] = nodeParameters 
+        
+        return nodeDescription

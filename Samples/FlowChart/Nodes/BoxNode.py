@@ -7,6 +7,8 @@ class BoxNode(ObjectWithText, NodeWith4ConnectionPorts):
     def __init__(self, **kwargs):
         super(BoxNode, self).__init__(**kwargs)
         self.boundingBoxDimensions = kwargs.get("boundingBoxDimensions", [90, 30])
+        self.parametersForSaving.append("text")
+        self.parametersForSaving.append("boundingBoxDimensions")
 
     def IsPointInside(self, pos):
         if pos[0] < self.position[0]: return False
@@ -50,9 +52,6 @@ class BoxNode(ObjectWithText, NodeWith4ConnectionPorts):
                          self.boundingBoxDimensions[0]+4, 
                          self.boundingBoxDimensions[1]+4)
 
-    def GetCloningNodeDescription(self):
-        return self.text
-    
     def DrawText(self, gc):
         gc.Clip(self.position[0], self.position[1], self.boundingBoxDimensions[0], self.boundingBoxDimensions[1])
         gc.SetFont(wx.Font(14, wx.ROMAN, wx.NORMAL, wx.NORMAL))

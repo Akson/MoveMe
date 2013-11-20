@@ -3,6 +3,8 @@ import wx
 from MoveMe.Canvas.Objects.SimpleScalableTextBoxNode import SimpleScalableTextBoxNode
 from MoveMe.Canvas.Factories.DefaultNodesFactory import DefaultNodesFactory
 from MoveMe.Canvas.Factories.DefaultConnectionsFactory import DefaultConnectionsFactory
+import json
+import logging
 
 # Define Text Drop Target class
 class TextDropTarget(wx.TextDropTarget):
@@ -18,8 +20,12 @@ class Canvas(wx.PyScrolledWindow):
     Canvas stores and renders all nodes and node connections.
     It also handles all user interaction.
     """
+    
     def __init__(self, parent, nodesFactory=DefaultNodesFactory(), connectionsFactory=DefaultConnectionsFactory(), **kwargs):
         super(Canvas, self).__init__(parent=parent)
+        
+        self.applicationId = "MoveMe"
+        
         self.scrollStep = kwargs.get("scrollStep", 10)
         self.canvasDimensions = kwargs.get("canvasDimensions", [1600, 800])
         self.SetScrollbars(self.scrollStep, 
@@ -57,11 +63,38 @@ class Canvas(wx.PyScrolledWindow):
         self.SetDropTarget(TextDropTarget(self))
 
     def CreateNodeFromDescriptionAtPosition(self, nodeDescription, pos):
-        node = self._nodesFactory.CreateNodeFromDescription(nodeDescription)
+        #We should always get json
+        try:
+            nodeDescriptionDict = json.loads(nodeDescription)
+        except:
+            logging.warning("Cannot create a node from a provided description")
+            logging.debug("Provided node description should be in JSON format")
+            logging.debug(nodeDescription)
+            return
+        
+        #We should always get APPLICATION_ID field 
+        if not "APPLICATION_ID" in nodeDescriptionDict:
+            logging.warning("Cannot create a node from a provided description")
+            logging.debug("Provided node description should contain APPLICATION_ID field")
+            logging.debug(nodeDescription)
+            return
+        
+        #Only currently selected APPLICATION_ID is supported
+        if nodeDescriptionDict["APPLICATION_ID"] != self.applicationId:
+            logging.warning("Cannot create a node from a provided description")
+            logging.debug("Provided node description APPLICATION_ID field is incompatible with current application")
+            logging.debug(nodeDescription)
+            return
+
+        node = self._nodesFactory.CreateNodeFromDescription(nodeDescriptionDict)
         if node:
             node.position = pos
             self._canvasObjects.append(node)
             self.Render()
+        else:
+            logging.warning("Cannot create a node from a provided description")
+            logging.debug(nodeDescription)
+
 
     def Render(self):
         """Render all nodes and their connection in depth order."""
@@ -135,8 +168,9 @@ class Canvas(wx.PyScrolledWindow):
             if self._objectUnderCursor.connectableSource:
                 self._connectionStartObject = self._objectUnderCursor
         elif evt.ControlDown() and self._objectUnderCursor.clonable:
-            text = self._objectUnderCursor.GetCloningNodeDescription()
-            data = wx.TextDataObject(text)
+            nodeDescriptionDict = self._objectUnderCursor.GetCloningNodeDescription()
+            nodeDescriptionDict["APPLICATION_ID"] = self.applicationId
+            data = wx.TextDataObject(json.dumps(nodeDescriptionDict))
             dropSource = wx.DropSource(self)
             dropSource.SetData(data)
             dropSource.DoDragDrop(wx.Drag_AllowMove)
