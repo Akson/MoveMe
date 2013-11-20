@@ -5,15 +5,15 @@ from MessageProcessingGraph.NodesFactory import NodesFactory
 
 class CanvasWindow(wx.Frame):
     def __init__(self, *args, **kw):
-        wx.Frame.__init__(self, *args, **kw)
+        wx.Frame.__init__(self, size=[1280, 720], *args, **kw)
         s = wx.BoxSizer(wx.VERTICAL)
 
         canvas = Canvas(parent=self, nodesFactory=NodesFactory())
         canvas.CreateNodeFromDescriptionAtPosition('{"NodeClass": "NumbersSequenceSource", "NodeParameters": {}}', [20,20])
-        canvas.CreateNodeFromDescriptionAtPosition('{"NodeClass": "HubNode", "NodeParameters": {}}', [140,20])
-        canvas.CreateNodeFromDescriptionAtPosition('{"NodeClass": "X2Node", "NodeParameters": {}}', [140,60])
-        canvas.CreateNodeFromDescriptionAtPosition('{"NodeClass": "Plus1Node", "NodeParameters": {}}', [140,100])
-        canvas.CreateNodeFromDescriptionAtPosition('{"NodeClass": "Message2ConsoleWriterNode", "NodeParameters": {}}', [260,20])
+        canvas.CreateNodeFromDescriptionAtPosition('{"NodeClass": "Hub", "NodeParameters": {}}', [240,20])
+        canvas.CreateNodeFromDescriptionAtPosition('{"NodeClass": "X2", "NodeParameters": {}}', [240,100])
+        canvas.CreateNodeFromDescriptionAtPosition('{"NodeClass": "Plus1", "NodeParameters": {}}', [240,180])
+        canvas.CreateNodeFromDescriptionAtPosition('{"NodeClass": "Message2ConsoleWriterNode", "NodeParameters": {}}', [460,20])
 
         s.Add(canvas, 1, wx.EXPAND)
         self.SetSizer(s)

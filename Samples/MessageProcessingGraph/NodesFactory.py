@@ -22,9 +22,9 @@ class NodesFactory(NodesFactoryInterface):
         
         nodeClasses = {
                        "NumbersSequenceSource":NumbersSequenceSource, 
-                       "HubNode":HubNode, 
-                       "X2Node":X2Node, 
-                       "Plus1Node":Plus1Node, 
+                       "Hub":Hub, 
+                       "X2":X2, 
+                       "Plus1":Plus1, 
                        "Message2ConsoleWriterNode":Message2ConsoleWriterNode
                        }
         nodeClass = nodeClasses[nodeDescriptionDict["NodeClass"]]
