@@ -14,8 +14,8 @@ class BaseNode(ObjectWithText, ClonableObject, DeletableObject, SelectableObject
 
         self.boundingBoxDimensions = [90, 30]
         self.nodeBackgroundColor = '#EEEEEE'
-        self.parametersForSaving.append("text")
-        self.parametersForSaving.append("boundingBoxDimensions")
+        self.parametersForCloning.append("text")
+        self.parametersForCloning.append("boundingBoxDimensions")
 
     def Render(self, gc):
         gc.SetBrush(wx.Brush(self.nodeBackgroundColor, wx.SOLID))

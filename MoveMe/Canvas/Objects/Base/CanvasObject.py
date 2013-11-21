@@ -42,3 +42,23 @@ class CanvasObject(object):
         pos: tested position as a list of x, y coordinates such as [100, 200]
         """
         raise NotImplementedError()
+    
+    def GetListOfAllPossibleConnectionsSources(self):
+        """
+        Returns a list that contains this object and all children 
+        that can be connected to other objects as connection sources.
+        """ 
+        raise NotImplementedError()
+    
+    def SaveObjectToDict(self):
+        """
+        Returns a complete node and all children description required for
+        saving a node and it's restoring in future
+        """
+        return {"NodeClass":self.__class__.__name__,"NodeParameters":self.__dict__}
+    
+    def LoadObjectFromDict(self, parametersDict):
+        """
+        Updates object and it's children parameters from provided dictionary
+        """
+        self.__dict__.update(parametersDict)

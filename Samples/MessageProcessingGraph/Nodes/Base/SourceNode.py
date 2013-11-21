@@ -21,3 +21,6 @@ class SourceNode(BaseNode, ConnectableSource):
     def SendMessage(self, message):
         for connection in self.GetOutcomingConnections():
             connection.destination.ReceiveMessage(message)
+
+    def GetListOfAllPossibleConnectionsSources(self):
+        return [self]

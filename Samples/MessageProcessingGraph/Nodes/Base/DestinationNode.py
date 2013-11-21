@@ -16,3 +16,6 @@ class DestinationNode(BaseNode, ConnectableDestination):
     def ReceiveMessage(self, message):
         """"This is a destination node, so it should process all incoming messages here"""
         raise NotImplementedError()
+    
+    def GetListOfAllPossibleConnectionsSources(self):
+        return None

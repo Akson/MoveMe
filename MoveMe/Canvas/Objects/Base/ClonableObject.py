@@ -5,7 +5,7 @@ class ClonableObject(CanvasObject):
     def __init__(self):
         super(ClonableObject, self).__init__()
         self.clonable = True
-        self.parametersForSaving = []
+        self.parametersForCloning = []
 
     def GetCloningNodeDescription(self):
         """
@@ -16,7 +16,7 @@ class ClonableObject(CanvasObject):
         nodeDescription["NodeClass"] = self.__class__.__name__
         
         nodeParameters = {}
-        for parameter in self.parametersForSaving:
+        for parameter in self.parametersForCloning:
             nodeParameters[parameter] = self.__dict__[parameter]
         nodeDescription["NodeParameters"] = nodeParameters 
         

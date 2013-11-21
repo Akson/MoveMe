@@ -70,30 +70,32 @@ class Canvas(wx.PyScrolledWindow):
             logging.warning("Cannot create a node from a provided description")
             logging.debug("Provided node description should be in JSON format")
             logging.debug(nodeDescription)
-            return
+            return None
         
         #We should always get APPLICATION_ID field 
         if not "APPLICATION_ID" in nodeDescriptionDict:
             logging.warning("Cannot create a node from a provided description")
             logging.debug("Provided node description should contain APPLICATION_ID field")
             logging.debug(nodeDescription)
-            return
+            return None
         
         #Only currently selected APPLICATION_ID is supported
         if nodeDescriptionDict["APPLICATION_ID"] != self.applicationId:
             logging.warning("Cannot create a node from a provided description")
             logging.debug("Provided node description APPLICATION_ID field is incompatible with current application")
             logging.debug(nodeDescription)
-            return
+            return None
 
         node = self._nodesFactory.CreateNodeFromDescription(nodeDescriptionDict)
         if node:
             node.position = pos
             self._canvasObjects.append(node)
             self.Render()
+            return node
         else:
             logging.warning("Cannot create a node from a provided description")
             logging.debug(nodeDescription)
+            return None
 
 
     def Render(self):
@@ -218,6 +220,16 @@ class Canvas(wx.PyScrolledWindow):
                 if self._selectedObject in self._canvasObjects:
                     self._canvasObjects.remove(self._selectedObject)
                 self._selectedObject = None
+        elif evt.GetKeyCode() == wx.WXK_SPACE:
+            print self.SaveCanvasToDict()
+        elif evt.GetKeyCode() == 83:#'s'
+            f=open("canvas.json", "w")
+            f.write(json.dumps(self.SaveCanvasToDict()))
+            f.close()
+        elif evt.GetKeyCode() == 76:#'l'
+            f=open("canvas.json", "r")
+            self.LoadCanvasFromDict(json.load(f))
+            f.close()
         else: 
             evt.Skip()
 
@@ -232,3 +244,42 @@ class Canvas(wx.PyScrolledWindow):
         if newConnection:
             self._connectionStartObject.AddOutcomingConnection(newConnection)
             self._objectUnderCursor.AddIncomingConnection(newConnection)
+
+    def ConnectNodesById(self, sourceId, destinationId):
+        print sourceId, destinationId
+            
+    def SaveCanvasToDict(self):
+        result = {}
+        
+        #Save nodes
+        result["Nodes"] = []
+        for node in self._canvasObjects:
+            print node.SaveObjectToDict()
+            result["Nodes"].append(node.SaveObjectToDict())
+
+        #Save connections
+        result["Connections"] = []
+        for node in self._canvasObjects:
+            for connectionSource in node.GetListOfAllPossibleConnectionsSources():
+                for connection in connectionSource.GetOutcomingConnections():
+                    result["Connections"].append({"sourceId":connection.source.id, "destinationId":connection.destination.id})
+        
+        return result
+    
+    def LoadCanvasFromDict(self, canvasDict):
+        self.ClearCanvas()
+
+        #Load nodes
+        for nodeDict in canvasDict["Nodes"]:
+            newNode = self._nodesFactory.CreateNodeFromDescription(nodeDict)
+            if newNode:
+                self._canvasObjects.append(newNode)
+                
+        #Load connections
+        for connectionDict in canvasDict["Connections"]:
+            self.ConnectNodesById(connectionDict["sourceId"], connectionDict["destinationId"])
+    
+    def ClearCanvas(self):
+        for node in self._canvasObjects:
+            node.Delete()
+        self._canvasObjects = []

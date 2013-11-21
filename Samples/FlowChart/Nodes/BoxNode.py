@@ -7,8 +7,8 @@ class BoxNode(ObjectWithText, NodeWith4ConnectionPorts):
     def __init__(self, **kwargs):
         super(BoxNode, self).__init__(**kwargs)
         self.boundingBoxDimensions = kwargs.get("boundingBoxDimensions", [90, 30])
-        self.parametersForSaving.append("text")
-        self.parametersForSaving.append("boundingBoxDimensions")
+        self.parametersForCloning.append("text")
+        self.parametersForCloning.append("boundingBoxDimensions")
 
     def IsPointInside(self, pos):
         if pos[0] < self.position[0]: return False
@@ -19,13 +19,13 @@ class BoxNode(ObjectWithText, NodeWith4ConnectionPorts):
     
     def UpdateConnectionPortsPositions(self):
         #top
-        self.connectionPorts[0].relativeCenterPosition = [0.5*self.boundingBoxDimensions[0], 0]
+        self._connectionPorts[0].relativeCenterPosition = [0.5*self.boundingBoxDimensions[0], 0]
         #bottom
-        self.connectionPorts[1].relativeCenterPosition = [0.5*self.boundingBoxDimensions[0], self.boundingBoxDimensions[1]]
+        self._connectionPorts[1].relativeCenterPosition = [0.5*self.boundingBoxDimensions[0], self.boundingBoxDimensions[1]]
         #left
-        self.connectionPorts[2].relativeCenterPosition = [0, 0.5*self.boundingBoxDimensions[1]]
+        self._connectionPorts[2].relativeCenterPosition = [0, 0.5*self.boundingBoxDimensions[1]]
         #right
-        self.connectionPorts[3].relativeCenterPosition = [self.boundingBoxDimensions[0], 0.5*self.boundingBoxDimensions[1]]
+        self._connectionPorts[3].relativeCenterPosition = [self.boundingBoxDimensions[0], 0.5*self.boundingBoxDimensions[1]]
 
     def RenderMainShape(self, gc):
         gc.SetBrush(wx.Brush('#EEEEEE', wx.SOLID))

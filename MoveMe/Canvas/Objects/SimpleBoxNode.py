@@ -106,3 +106,6 @@ class SimpleBoxNode(ConnectableSource, ConnectableDestination, ClonableObject, D
             connection.destination.DeleteIncomingConnection(connection)
         for connection in self._incomingConnections:
             connection.source.DeleteOutcomingConnection(connection)
+            
+    def GetListOfAllPossibleConnectionsSources(self):
+        return [self]

@@ -5,7 +5,7 @@ from MoveMe.Canvas.Objects.Base.ObjectWithText import ObjectWithText
 class SimpleScalableTextBoxNode(ObjectWithText, SimpleBoxNode):
     def __init__(self, **kwargs):
         super(SimpleScalableTextBoxNode, self).__init__(**kwargs)
-        self.parametersForSaving.append("text")
+        self.parametersForCloning.append("text")
         
     def Render(self, gc):
         textDimensions = gc.GetTextExtent(self.text)

@@ -34,3 +34,6 @@ class IntermediateNode(BaseNode, ConnectableSource, ConnectableDestination):
         Returns None if there is no need to continue processing this message.
         """
         raise NotImplementedError()
+    
+    def GetListOfAllPossibleConnectionsSources(self):
+        return [self]

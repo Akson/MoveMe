@@ -27,7 +27,7 @@ class DefaultNodesFactory(NodesFactoryInterface):
             
             if "NodeParameters" in nodeDescription:
                 if type(nodeDescription["NodeParameters"]) == dict:
-                    node.__dict__.update(nodeDescription["NodeParameters"])
+                    node.LoadObjectFromDict(nodeDescription["NodeParameters"])
                 else:
                     logging.warning("NodeParameters should be a dictionary")
             
