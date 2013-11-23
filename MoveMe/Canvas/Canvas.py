@@ -223,11 +223,11 @@ class Canvas(wx.PyScrolledWindow):
         elif evt.GetKeyCode() == wx.WXK_SPACE:
             print self.SaveCanvasToDict()
         elif evt.GetKeyCode() == 83:#'s'
-            f=open("canvas.json", "w")
-            f.write(json.dumps(self.SaveCanvasToDict()))
+            f=open("canvas.mmj", "w")
+            f.write(json.dumps(self.SaveCanvasToDict(), sort_keys=True, indent=4, separators=(',', ': ')))
             f.close()
         elif evt.GetKeyCode() == 76:#'l'
-            f=open("canvas.json", "r")
+            f=open("canvas.mmj", "r")
             self.LoadCanvasFromDict(json.load(f))
             f.close()
         else: 
@@ -242,11 +242,11 @@ class Canvas(wx.PyScrolledWindow):
     def ConnectNodes(self, source, destination):
         newConnection = self._connectionsFactory.CreateConnectionBetweenNodesFromDescription(source, destination)
         if newConnection:
-            self._connectionStartObject.AddOutcomingConnection(newConnection)
-            self._objectUnderCursor.AddIncomingConnection(newConnection)
+            source.AddOutcomingConnection(newConnection)
+            destination.AddIncomingConnection(newConnection)
 
-    def ConnectNodesById(self, sourceId, destinationId):
-        print sourceId, destinationId
+    def ConnectNodesByIndexes(self, sourceIdx, destinationIdx):
+        self.ConnectNodes(self._canvasObjects[sourceIdx], self._canvasObjects[destinationIdx])
             
     def SaveCanvasToDict(self):
         result = {}
@@ -254,15 +254,13 @@ class Canvas(wx.PyScrolledWindow):
         #Save nodes
         result["Nodes"] = []
         for node in self._canvasObjects:
-            print node.SaveObjectToDict()
             result["Nodes"].append(node.SaveObjectToDict())
 
         #Save connections
         result["Connections"] = []
         for node in self._canvasObjects:
-            for connectionSource in node.GetListOfAllPossibleConnectionsSources():
-                for connection in connectionSource.GetOutcomingConnections():
-                    result["Connections"].append({"sourceId":connection.source.id, "destinationId":connection.destination.id})
+            for connection in node.GetOutcomingConnections():
+                result["Connections"].append({"sourceIdx":self._canvasObjects.index(connection.source), "destinationIdx":self._canvasObjects.index(connection.destination)})
         
         return result
     
@@ -277,7 +275,7 @@ class Canvas(wx.PyScrolledWindow):
                 
         #Load connections
         for connectionDict in canvasDict["Connections"]:
-            self.ConnectNodesById(connectionDict["sourceId"], connectionDict["destinationId"])
+            self.ConnectNodesByIndexes(connectionDict["sourceIdx"], connectionDict["destinationIdx"])
     
     def ClearCanvas(self):
         for node in self._canvasObjects:

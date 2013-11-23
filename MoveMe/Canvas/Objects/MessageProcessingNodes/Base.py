@@ -1,26 +1,24 @@
 #Created by Dmytro Konobrytskyi, 2013 (github.com/Akson/MoveMe)
 import wx
-from MoveMe.Canvas.Objects.Base.CanvasObject import CanvasObject
-from MoveMe.Canvas.Objects.Base.MovableObject import MovableObject
-from MoveMe.Canvas.Objects.Base.SelectableObject import SelectableObject
-from MoveMe.Canvas.Objects.Base.DeletableObject import DeletableObject
+import numpy as np
 from MoveMe.Canvas.Objects.Base.ClonableObject import ClonableObject
 from MoveMe.Canvas.Objects.Base.ConnectableDestination import ConnectableDestination
 from MoveMe.Canvas.Objects.Base.ConnectableSource import ConnectableSource
+from MoveMe.Canvas.Objects.Base.DeletableObject import DeletableObject
+from MoveMe.Canvas.Objects.Base.MovableObject import MovableObject
+from MoveMe.Canvas.Objects.Base.ObjectWithText import ObjectWithText
+from MoveMe.Canvas.Objects.Base.SelectableObject import SelectableObject
 
-import numpy as np
+class BaseMessageProcessingNode(ConnectableSource, ConnectableDestination, ObjectWithText, ClonableObject, DeletableObject, SelectableObject, MovableObject):
+    def __init__(self):
+        super(BaseMessageProcessingNode, self).__init__()
 
-class SimpleBoxNode(ConnectableSource, ConnectableDestination, ClonableObject, DeletableObject, SelectableObject, MovableObject, CanvasObject):
-    """
-    SimpleBoxNode class represents a simplest possible canvas object 
-    that is basically a rectangular box.
-    """
-    def __init__(self, boundingBoxDimensions=[90,30], **kwargs):
-        super(SimpleBoxNode, self).__init__(**kwargs)
-        self.boundingBoxDimensions = boundingBoxDimensions
+        self.boundingBoxDimensions = [90, 30]
+        self.nodeBackgroundColor = '#EEEEEE'
+        self.parametersForCloning.append("text")
 
     def Render(self, gc):
-        gc.SetBrush(wx.Brush('#EEEEEE', wx.SOLID))
+        gc.SetBrush(wx.Brush(self.nodeBackgroundColor, wx.SOLID))
         gc.SetPen(wx.Pen('#000000', 2, wx.SOLID))
         gc.DrawRoundedRectangle(self.position[0], 
                                 self.position[1], 
@@ -30,6 +28,8 @@ class SimpleBoxNode(ConnectableSource, ConnectableDestination, ClonableObject, D
         if self.connectableSource:
             for connection in self.GetOutcomingConnections():
                 connection.Render(gc)
+        
+        self.DrawText(gc)
 
     def RenderHighlighting(self, gc):
         gc.SetBrush(wx.Brush('#888888', wx.TRANSPARENT))
@@ -47,17 +47,6 @@ class SimpleBoxNode(ConnectableSource, ConnectableDestination, ClonableObject, D
                          self.boundingBoxDimensions[0]+4, 
                          self.boundingBoxDimensions[1]+4)
         
-    def ReturnObjectUnderCursor(self, pos):
-        if self.IsPointInside(pos): 
-            return self
-        
-        for connection in self._outcomingConnections:
-            connectionComponent = connection.ReturnObjectUnderCursor(pos)
-            if connectionComponent: 
-                return connectionComponent
-
-        return None
-
     def IsPointInside(self, pos):
         if pos[0] < self.position[0]: return False
         if pos[1] < self.position[1]: return False
@@ -102,7 +91,26 @@ class SimpleBoxNode(ConnectableSource, ConnectableDestination, ClonableObject, D
         return [self.position[0] + 0.5*self.boundingBoxDimensions[0], self.position[1] + 0.5*self.boundingBoxDimensions[1]]
     
     def Delete(self):
-        for connection in self._outcomingConnections:
-            connection.destination.DeleteIncomingConnection(connection)
-        for connection in self._incomingConnections:
-            connection.source.DeleteOutcomingConnection(connection)
+        if self.connectableSource:
+            for connection in self._outcomingConnections:
+                connection.destination.DeleteIncomingConnection(connection)
+        if self.connectableDestination:
+            for connection in self._incomingConnections:
+                connection.source.DeleteOutcomingConnection(connection)
+    
+    def DrawText(self, gc):
+        gc.Clip(self.position[0], self.position[1], self.boundingBoxDimensions[0], self.boundingBoxDimensions[1])
+        gc.SetFont(wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT))
+        gc.DrawText(self.text, self.position[0]+5, self.position[1]+5)
+        
+    def ReturnObjectUnderCursor(self, pos):
+        if self.IsPointInside(pos): 
+            return self
+        
+        if self.connectableSource:
+            for connection in self._outcomingConnections:
+                connectionComponent = connection.ReturnObjectUnderCursor(pos)
+                if connectionComponent: 
+                    return connectionComponent
+
+        return None
