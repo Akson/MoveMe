@@ -46,3 +46,10 @@ class CanvasObject(object):
         Updates object and it's children parameters from provided dictionary
         """
         self.__dict__.update(parametersDict)
+        
+    def AppendContextMenuItems(self, menu):
+        """
+        Appends node specific items to a context menu item that pops up on
+        mouse right click. It does nothing by default.
+        """
+        pass 

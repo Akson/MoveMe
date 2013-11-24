@@ -58,6 +58,8 @@ class Canvas(wx.PyScrolledWindow):
         self.Bind(wx.EVT_LEFT_DOWN, self.OnMouseLeftDown)
         self.Bind(wx.EVT_LEFT_UP, self.OnMouseLeftUp)
 
+        self.Bind(wx.EVT_RIGHT_UP, self.OnMouseRightUp)
+
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyPress)
         
         self.SetDropTarget(TextDropTarget(self))
@@ -203,6 +205,26 @@ class Canvas(wx.PyScrolledWindow):
         self._connectionStartObject = None
         self._draggingObject = None
         self.Render()
+
+    def OnMouseRightUp(self, evt):
+        menu = wx.Menu()
+        
+        #Append canvas menu items here
+        item = wx.MenuItem(menu, wx.NewId(), "Dummy canvas menu item...")
+        menu.AppendItem(item)
+
+        def OnItem1(event):
+            print "Dummy canvas menu item..."
+
+        menu.Bind(wx.EVT_MENU, OnItem1, item)
+        menu.AppendSeparator()
+
+        #Append node menu items
+        if self._objectUnderCursor:
+            self._objectUnderCursor.AppendContextMenuItems(menu)
+        
+        self.PopupMenu(menu, evt.GetPosition())
+        menu.Destroy()
 
     def FindObjectUnderPoint(self, pos):
         #Check all objects on a canvas. 
