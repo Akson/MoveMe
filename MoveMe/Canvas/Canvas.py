@@ -272,6 +272,8 @@ class Canvas(wx.PyScrolledWindow):
             newNode = self._nodesFactory.CreateNodeFromDescription(nodeDict)
             if newNode:
                 self._canvasObjects.append(newNode)
+            else:
+                logging.error("Cannot load saved node")
                 
         #Load connections
         for connectionDict in canvasDict["Connections"]:

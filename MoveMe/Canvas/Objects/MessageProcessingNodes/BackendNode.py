@@ -1,5 +1,6 @@
 #Created by Dmytro Konobrytskyi, 2013 (github.com/Akson/MoveMe)
 from MoveMe.Canvas.Objects.MessageProcessingNodes.Base import BaseMessageProcessingNode
+from MoveMe.Canvas.Objects.MessageProcessingNodes.BackendFactory import CreateBackendFromPath
 
 class BackendNode(BaseMessageProcessingNode):
     def __init__(self):
@@ -11,8 +12,7 @@ class BackendNode(BaseMessageProcessingNode):
 
     def SetBackend(self, backendPath, backendParameters = {}):
         self.backendPath = backendPath
-        #Create new backend object
-        pass
+        self._backendObject = CreateBackendFromPath(self, backendPath, backendParameters)
     
     def SendMessage(self, message):
         if not self.connectableSource:
@@ -40,7 +40,8 @@ class BackendNode(BaseMessageProcessingNode):
     
     def LoadObjectFromDict(self, parametersDict):
         for key in self.parametersForCloning:
-            self.__dict__[key] = parametersDict[key]
+            if key in  parametersDict:
+                self.__dict__[key] = parametersDict[key]
         if "position" in parametersDict:
             self.position = parametersDict["position"]
         self.SetBackend(parametersDict["backendPath"], parametersDict.get("backendParameters", {}))
