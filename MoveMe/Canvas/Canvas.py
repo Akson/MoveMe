@@ -1,6 +1,5 @@
 #Created by Dmytro Konobrytskyi, 2013 (github.com/Akson/MoveMe)
 import wx
-from MoveMe.Canvas.Objects.SimpleScalableTextBoxNode import SimpleScalableTextBoxNode
 from MoveMe.Canvas.Factories.DefaultNodesFactory import DefaultNodesFactory
 from MoveMe.Canvas.Factories.DefaultConnectionsFactory import DefaultConnectionsFactory
 import json
