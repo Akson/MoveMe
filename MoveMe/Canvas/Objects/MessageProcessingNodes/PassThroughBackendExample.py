@@ -1,8 +1,14 @@
 #Created by Dmytro Konobrytskyi, 2013 (github.com/Akson/MoveMe)
 
-class PassThroughBackendObject(object):
+class Backend(object):
     def __init__(self, parentNode):
         self._parentNode = parentNode
+
+    def Delete(self):
+        """
+        This method is called when a parent node is deleted.
+        """
+        pass
     
     def GetParameters(self):
         """

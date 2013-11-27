@@ -46,7 +46,10 @@ class BackendNode(BaseMessageProcessingNode):
             self.position = parametersDict["position"]
         self.SetBackend(parametersDict["backendPath"], parametersDict.get("backendParameters", {}))
 
-        
+    def Delete(self):
+        if self._backendObject:
+            self._backendObject.Delete()
+            
 class SourceBackendNode(BackendNode):
     def __init__(self):
         super(SourceBackendNode, self).__init__()

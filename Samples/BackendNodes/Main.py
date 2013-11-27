@@ -19,7 +19,7 @@ class CanvasWindow(wx.Frame):
         
         canvas = Canvas(parent=self, nodesFactory=DefaultNodesFactory(supportedClasses))
         canvas.applicationId = "BackendNode"
-        canvas.CreateNodeFromDescriptionAtPosition('{"NodeClass": "SourceBackendNode", "APPLICATION_ID": "BackendNode", "NodeParameters":{"backendPath": "MoveMe.Canvas.Objects.MessageProcessingNodes.BackendObjectExample.PassThroughBackendObject"}}', [20,20])
+        canvas.CreateNodeFromDescriptionAtPosition('{"NodeClass": "SourceBackendNode", "APPLICATION_ID": "BackendNode", "NodeParameters":{"backendPath": "MoveMe.Canvas.Objects.MessageProcessingNodes.PassThroughBackendExample"}}', [20,20])
         canvas.CreateNodeFromDescriptionAtPosition('{"NodeClass": "BackendNode", "APPLICATION_ID": "BackendNode"}', [240,20])
         canvas.CreateNodeFromDescriptionAtPosition('{"NodeClass": "DestinationBackendNode", "APPLICATION_ID": "BackendNode"}', [460,20])
         
