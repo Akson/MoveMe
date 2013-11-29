@@ -265,6 +265,8 @@ class Canvas(wx.PyScrolledWindow):
         if newConnection:
             source.AddOutcomingConnection(newConnection)
             destination.AddIncomingConnection(newConnection)
+        
+        self.Render()
 
     def ConnectNodesByIndexes(self, sourceIdx, destinationIdx):
         self.ConnectNodes(self._canvasObjects[sourceIdx], self._canvasObjects[destinationIdx])
@@ -299,6 +301,8 @@ class Canvas(wx.PyScrolledWindow):
         #Load connections
         for connectionDict in canvasDict["Connections"]:
             self.ConnectNodesByIndexes(connectionDict["sourceIdx"], connectionDict["destinationIdx"])
+            
+        self.Render()
     
     def ClearCanvas(self):
         for node in self._canvasObjects:
