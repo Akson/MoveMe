@@ -206,16 +206,11 @@ class Canvas(wx.PyScrolledWindow):
         self.Render()
 
     def OnMouseRightUp(self, evt):
+        self._mousePositionAtContextMenuCreation = self._curMousePos
         menu = wx.Menu()
-        
+
         #Append canvas menu items here
-        item = wx.MenuItem(menu, wx.NewId(), "Dummy canvas menu item...")
-        menu.AppendItem(item)
-
-        def OnItem1(event):
-            print "Dummy canvas menu item..."
-
-        menu.Bind(wx.EVT_MENU, OnItem1, item)
+        self.AppendContextMenuItems(menu)
         menu.AppendSeparator()
 
         #Append node menu items
@@ -224,6 +219,15 @@ class Canvas(wx.PyScrolledWindow):
         
         self.PopupMenu(menu, evt.GetPosition())
         menu.Destroy()
+        
+    def AppendContextMenuItems(self, menu):
+        item = wx.MenuItem(menu, wx.NewId(), "Dummy canvas menu item...")
+        menu.AppendItem(item)
+
+        def OnItem1(event):
+            print "Dummy canvas menu item..."
+
+        menu.Bind(wx.EVT_MENU, OnItem1, item)
 
     def FindObjectUnderPoint(self, pos):
         #Check all objects on a canvas. 
