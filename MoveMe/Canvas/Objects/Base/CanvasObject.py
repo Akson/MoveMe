@@ -9,6 +9,7 @@ class CanvasObject(object):
         self.selectable = False
         self.connectableSource = False
         self.connectableDestination = False
+        CanvasObject.shortHumanFriendlyDescription = "No description available"
         
     def Render(self, gc): 
         """

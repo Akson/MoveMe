@@ -9,6 +9,7 @@ class BackendNode(BaseMessageProcessingNode):
         self.backendPath = None
         self._backendObject = None
         self.parametersForCloning.append("backendPath")
+        BackendNode.shortHumanFriendlyDescription = "Message processing node with backend"
 
     def SetBackend(self, backendPath, backendParameters = {}):
         self.backendPath = backendPath
@@ -55,6 +56,7 @@ class SourceBackendNode(BackendNode):
         super(SourceBackendNode, self).__init__()
         self.connectableDestination = False
         self.nodeBackgroundColor = '#DDFFDD'
+        SourceBackendNode.shortHumanFriendlyDescription = "Message source node with backend"
 
 
 class DestinationBackendNode(BackendNode):
@@ -62,4 +64,5 @@ class DestinationBackendNode(BackendNode):
         super(DestinationBackendNode, self).__init__()
         self.connectableSource = False
         self.nodeBackgroundColor = '#FFDDDD'
+        DestinationBackendNode.shortHumanFriendlyDescription = "Message destination node with backend"
 

@@ -64,14 +64,16 @@ class Canvas(wx.PyScrolledWindow):
         self.SetDropTarget(TextDropTarget(self))
 
     def CreateNodeFromDescriptionAtPosition(self, nodeDescription, pos):
-        #We should always get json
-        try:
-            nodeDescriptionDict = json.loads(nodeDescription)
-        except:
-            logging.warning("Cannot create a node from a provided description")
-            logging.debug("Provided node description should be in JSON format")
-            logging.debug(nodeDescription)
-            return None
+        if type(nodeDescription) == dict:
+            nodeDescriptionDict = nodeDescription
+        else:
+            try:#to assume that it is a json string
+                nodeDescriptionDict = json.loads(nodeDescription)
+            except:
+                logging.warning("Cannot create a node from a provided description")
+                logging.debug("Provided node description should be in JSON format")
+                logging.debug(nodeDescription)
+                return None
         
         #We should always get APPLICATION_ID field 
         if not "APPLICATION_ID" in nodeDescriptionDict:

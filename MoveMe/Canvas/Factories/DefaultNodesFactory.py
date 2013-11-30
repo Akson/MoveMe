@@ -3,10 +3,13 @@ from MoveMe.Canvas.Factories.NodesFactoryInterface import NodesFactoryInterface
 import logging
 
 class DefaultNodesFactory(NodesFactoryInterface):
-    def __init__(self, supportedClasses = {}):
-        if type(supportedClasses)!=dict:
-            raise TypeError("supportedClasses should be a dictionary")
-        self.supportedClasses = supportedClasses
+    def __init__(self, supportedClassesList = []):
+        if type(supportedClassesList)!=list:
+            raise TypeError("supportedClassesList should be a list")
+        
+        self.supportedClasses = {}
+        for curClass in supportedClassesList:
+            self.supportedClasses[curClass.__name__] = curClass
     
     def CreateNodeFromDescription(self, nodeDescription):
         if type(nodeDescription) != dict:
