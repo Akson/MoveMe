@@ -19,6 +19,12 @@ class BackendNode(BaseMessageProcessingNode):
         self._backendObject = CreateBackendFromPath(self, backendPath, backendParameters)
         if self._backendObject:
             self.backendPath = backendPath
+            
+    def ReloadBackend(self):
+        if self._backendObject:
+            parameters = self._backendObject.GetParameters()
+            self._backendObject.Delete()
+            self._backendObject = CreateBackendFromPath(self, self.backendPath, parameters)
     
     def SendMessage(self, message):
         if not self.connectableSource:
@@ -60,6 +66,11 @@ class BackendNode(BaseMessageProcessingNode):
         item = wx.MenuItem(menu, wx.NewId(), "Select backend")
         menu.Bind(wx.EVT_MENU, self.OnSelectBackend, item)
         menu.AppendItem(item)
+
+        if self._backendObject:
+            item = wx.MenuItem(menu, wx.NewId(), "Reload backend")
+            menu.Bind(wx.EVT_MENU, (lambda evt: self.ReloadBackend()) , item)
+            menu.AppendItem(item)
         
         if self._backendObject:
             menu.AppendSeparator()
