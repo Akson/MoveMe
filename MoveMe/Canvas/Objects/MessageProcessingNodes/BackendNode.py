@@ -1,6 +1,10 @@
 #Created by Dmytro Konobrytskyi, 2013 (github.com/Akson/MoveMe)
 from MoveMe.Canvas.Objects.MessageProcessingNodes.Base import BaseMessageProcessingNode
 from MoveMe.Canvas.Objects.MessageProcessingNodes.BackendFactory import CreateBackendFromPath
+import wx
+import os.path
+import logging
+import sys
 
 class BackendNode(BaseMessageProcessingNode):
     def __init__(self):
@@ -12,8 +16,9 @@ class BackendNode(BaseMessageProcessingNode):
         BackendNode.shortHumanFriendlyDescription = "Message processing node with backend"
 
     def SetBackend(self, backendPath, backendParameters = {}):
-        self.backendPath = backendPath
         self._backendObject = CreateBackendFromPath(self, backendPath, backendParameters)
+        if self._backendObject:
+            self.backendPath = backendPath
     
     def SendMessage(self, message):
         if not self.connectableSource:
@@ -50,6 +55,36 @@ class BackendNode(BaseMessageProcessingNode):
     def Delete(self):
         if self._backendObject:
             self._backendObject.Delete()
+            
+    def AppendContextMenuItems(self, menu):
+        item = wx.MenuItem(menu, wx.NewId(), "Select backend")
+        menu.Bind(wx.EVT_MENU, self.OnSelectBackend, item)
+        menu.AppendItem(item)
+        
+        if self._backendObject:
+            menu.AppendSeparator()
+            self._backendObject.AppendContextMenuItems(menu)
+
+    def OnSelectBackend(self, event):
+        dlg = wx.FileDialog(None, "Select a Python module with a Backend class", '', "", "Python modules (*.py)|*.py", wx.OPEN)
+        if dlg.ShowModal() == wx.ID_OK:
+            filePath = os.path.join(dlg.GetDirectory(), dlg.GetFilename())
+            classPath = self.GetClassPythFromFilePath(filePath)
+            if classPath:
+                self.SetBackend(classPath)
+            else:
+                logging.error("Cannot create backend object. Probably backend class is not in PythonPath")
+                
+        dlg.Destroy()
+        
+    def GetClassPythFromFilePath(self, filePath):
+        pythonPaths = sys.path
+        for path in pythonPaths:
+            if filePath.find(path) == 0:
+                classPath = ".".join(filePath[len(path)+1:-3].split('\\'))
+                return classPath
+        return None
+
             
 class SourceBackendNode(BackendNode):
     def __init__(self):

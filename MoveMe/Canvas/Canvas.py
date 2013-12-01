@@ -213,10 +213,10 @@ class Canvas(wx.PyScrolledWindow):
 
         #Append canvas menu items here
         self.AppendContextMenuItems(menu)
-        menu.AppendSeparator()
 
         #Append node menu items
         if self._objectUnderCursor:
+            menu.AppendSeparator()
             self._objectUnderCursor.AppendContextMenuItems(menu)
         
         self.PopupMenu(menu, evt.GetPosition())

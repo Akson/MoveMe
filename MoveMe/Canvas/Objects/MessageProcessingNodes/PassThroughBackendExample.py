@@ -32,3 +32,10 @@ class Backend(object):
         should be called with an appropriate message.
         """
         self._parentNode.SendMessage(message)
+        
+    def AppendContextMenuItems(self, menu):
+        """
+        Append backend specific menu items to a context menu that user will see
+        when he clicks on a node.
+        """
+        pass
