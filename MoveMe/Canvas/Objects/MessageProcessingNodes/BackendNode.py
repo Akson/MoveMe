@@ -44,7 +44,7 @@ class BackendNode(BaseMessageProcessingNode):
         try:
             self._backendObject.ProcessMessage(message)
         except:
-            print traceback.format_exc()
+            logging.debug(traceback.format_exc())
         
     def SaveObjectToDict(self):
         nodeDict = {"NodeClass":self.__class__.__name__}
