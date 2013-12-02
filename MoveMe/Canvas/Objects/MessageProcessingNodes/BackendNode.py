@@ -5,6 +5,7 @@ import wx
 import os.path
 import logging
 import sys
+import traceback
 
 class BackendNode(BaseMessageProcessingNode):
     def __init__(self):
@@ -31,7 +32,7 @@ class BackendNode(BaseMessageProcessingNode):
             return
 
         for connection in self.GetOutcomingConnections():
-            connection.destination.ReceiveMessage(message)
+                connection.destination.ReceiveMessage(message)
     
     def ReceiveMessage(self, message):
         if not self.connectableDestination:
@@ -40,7 +41,10 @@ class BackendNode(BaseMessageProcessingNode):
         if self._backendObject == None:
             return
         
-        self._backendObject.ProcessMessage(message)
+        try:
+            self._backendObject.ProcessMessage(message)
+        except:
+            print traceback.format_exc()
         
     def SaveObjectToDict(self):
         nodeDict = {"NodeClass":self.__class__.__name__}

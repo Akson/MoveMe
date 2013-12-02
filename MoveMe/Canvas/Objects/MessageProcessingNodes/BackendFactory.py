@@ -6,6 +6,7 @@ def CreateBackendFromPath(parentNode, backendPath, backendParameters={}):
         return None
     
     backendModule = importlib.import_module(backendPath)
+    reload(backendModule)
     backendClass = getattr(backendModule, "Backend")
     
     backendObj = backendClass(parentNode)
