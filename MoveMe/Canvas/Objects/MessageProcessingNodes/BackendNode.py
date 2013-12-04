@@ -20,6 +20,7 @@ class BackendNode(BaseMessageProcessingNode):
         self._backendObject = CreateBackendFromPath(self, backendPath, backendParameters)
         if self._backendObject:
             self.backendPath = backendPath
+            self.text = backendPath.split(".")[-1]
             
     def ReloadBackend(self):
         if self._backendObject:

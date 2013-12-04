@@ -13,7 +13,7 @@ class BaseMessageProcessingNode(ConnectableSource, ConnectableDestination, Objec
     def __init__(self):
         super(BaseMessageProcessingNode, self).__init__()
 
-        self.boundingBoxDimensions = [90, 30]
+        self.boundingBoxDimensions = [150, 30]
         self.nodeBackgroundColor = '#EEEEEE'
         self.parametersForCloning.append("text")
 
