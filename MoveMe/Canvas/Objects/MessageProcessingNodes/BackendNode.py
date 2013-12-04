@@ -65,6 +65,11 @@ class BackendNode(BaseMessageProcessingNode):
     def Delete(self):
         if self._backendObject:
             self._backendObject.Delete()
+
+        for connection in self._outcomingConnections:
+            connection.destination.DeleteIncomingConnection(connection)
+        for connection in self._incomingConnections:
+            connection.source.DeleteOutcomingConnection(connection)
             
     def AppendContextMenuItems(self, menu):
         item = wx.MenuItem(menu, wx.NewId(), "Select backend")
