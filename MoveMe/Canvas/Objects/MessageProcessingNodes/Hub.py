@@ -120,3 +120,16 @@ class HubMessageProcessingNode(ConnectableSource, ConnectableDestination, Object
         for connection in self.GetOutcomingConnections():
                 connection.destination.ReceiveMessage(message)
         
+    def SaveObjectToDict(self):
+        nodeDict = {"NodeClass":self.__class__.__name__}
+        nodeParameters = self.GetCloningNodeDescription()["NodeParameters"]
+        nodeParameters["position"] = self.position
+        nodeDict["NodeParameters"] = nodeParameters 
+        return nodeDict
+    
+    def LoadObjectFromDict(self, parametersDict):
+        for key in self.parametersForCloning:
+            if key in  parametersDict:
+                self.__dict__[key] = parametersDict[key]
+        if "position" in parametersDict:
+            self.position = parametersDict["position"]
